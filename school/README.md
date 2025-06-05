@@ -1,96 +1,42 @@
-📚 Projeto Avaliativo — Sistema de Requisição e Aprovação de Recursos Internos (SmartRequest)
-Este projeto tem como objetivo a criação de um sistema completo para gerenciamento de solicitações internas, aplicável em ambientes como empresas, universidades ou organizações. Ele foi desenvolvido com fins avaliativos, integrando conceitos práticos de desenvolvimento full-stack, autenticação, controle de acesso, banco de dados relacional e comunicação em tempo real.
+# 🧠 SmartRequest - Sistema de Requisição e Aprovação de Recursos Internos
 
-🎯 Objetivo do Sistema
-Facilitar a solicitação e o controle de recursos como:
+Este projeto avaliativo tem como objetivo o desenvolvimento de um sistema completo para **gerenciamento de solicitações internas**, voltado a empresas, universidades ou organizações. O sistema permite que colaboradores ou alunos solicitem recursos como materiais, acessos, verbas, férias ou equipamentos, com um fluxo claro de aprovação e acompanhamento.
 
-Materiais
+---
 
-Acessos
+## 🎯 Objetivo
 
-Verbas
+Automatizar o processo de requisição e aprovação de recursos internos, promovendo:
 
-Férias
+- Rastreabilidade das solicitações
+- Níveis de aprovação hierárquica
+- Notificações em tempo real
+- Transparência e controle para gestores
 
-Equipamentos
+---
 
-Automatizar o processo de aprovação por níveis hierárquicos, com rastreabilidade e transparência.
+## 👤 Gestão de Usuários
 
-👤 Gestão de Usuários
-Cadastro e login com autenticação segura (JWT + bcrypt)
+- **Cadastro e login seguro** (`JWT + bcrypt`)
+- Perfis com diferentes permissões:
+  - 📝 **Solicitante**: Cria e acompanha requisições
+  - ✅ **Aprovador**: Analisa, aprova ou devolve solicitações
+  - 🛠 **Admin**: Gerencia usuários e visualiza relatórios
 
-Perfis com diferentes níveis de permissão:
+---
 
-Solicitante: cria e acompanha requisições
+## 📄 Funcionalidades
 
-Aprovador: analisa e aprova/rejeita
+### 🗂 Solicitações
+- Criação de requisições com:
+  - Título, descrição, tipo, prioridade, data limite
+  - **Anexo opcional** (PDF ou imagem)
+- Acompanhamento completo via histórico
 
-Admin: gerencia o sistema e visualiza dados analíticos
-
-📝 Funcionalidades de Solicitação
-Criação de requisições com:
-
-Título
-
-Descrição
-
-Tipo
-
-Prioridade
-
-Data limite
-
-Upload de anexos (PDF ou imagem)
-
-Visualização de histórico completo de solicitações
-
-✅ Processo de Aprovação
-Aprovadores visualizam requisições pendentes
-
-Ações disponíveis:
-
-Aprovar
-
-Rejeitar
-
-Devolver com comentário para ajustes
-
-Fluxo de status:
-
-Pendente → Em análise → Aprovado / Rejeitado / Devolvido
-
-📊 Painel Administrativo
-Dashboard interativo com gráficos e indicadores:
-
-Quantidade de requisições por status
-
-Tipos de solicitações
-
-Tempo médio de resposta
-
-🔔 Notificações
-Atualizações em tempo real via:
-
-WebSocket
-
-ou Polling leve
-
-Exemplo de notificação: “Sua solicitação de verba foi aprovada!”
-
-🧱 Tecnologias Utilizadas (Stack)
-Back-end: Node.js + Express + Sequelize ou Prisma
-
-Banco de Dados: PostgreSQL ou MySQL
-
-Front-end: React + Axios + TailwindCSS ou Chakra UI
-
-Autenticação: JWT + bcrypt
-
-🛠️ Extras e Integrações
-Upload de arquivos com Multer
-
-Comunicação em tempo real com WebSocket
-
-Docker para ambiente local
-
-Deploy possível via Heroku
+### 🔄 Aprovações
+- Aprovadores recebem requisições pendentes
+- Podem:
+  - ✅ Aprovar
+  - ❌ Rejeitar
+  - 🔁 Devolver com comentário
+- Fluxo de status:
