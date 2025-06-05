@@ -1,4 +1,4 @@
-# 🧠 SmartRequest - Sistema de Requisição e Aprovação de Recursos Internos
+# 🧠 School Hub - Sistema de Requisição e Aprovação de Recursos Internos
 
 Este projeto avaliativo tem como objetivo o desenvolvimento de um sistema completo para **gerenciamento de solicitações internas**, voltado a empresas, universidades ou organizações. O sistema permite que colaboradores ou alunos solicitem recursos como materiais, acessos, verbas, férias ou equipamentos, com um fluxo claro de aprovação e acompanhamento.
 
