@@ -1,8 +1,9 @@
-import Header from "./components/Header"
+import Nav from "./components/Nav"
+import React from 'react'
 
 const App = () => {
   return (
-    <Header/>
+    <Nav/>
   )
 }
 
