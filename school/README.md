@@ -92,5 +92,6 @@ Painel completo com gráficos e indicadores:
 
 ## 🧑‍💻 Autor
 
-Desenvolvido como parte de um projeto acadêmico na área de **Análise e Desenvolvimento de Sistemas**.
-
+- Matheus Kilpp  
+- Pedro Covre  
+- Bernardo Hamilton
