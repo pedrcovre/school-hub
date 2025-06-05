@@ -40,3 +40,57 @@ Automatizar o processo de requisição e aprovação de recursos internos, promo
   - ❌ Rejeitar
   - 🔁 Devolver com comentário
 - Fluxo de status:
+
+---
+
+## 📊 Dashboard Administrativo
+
+Painel completo com gráficos e indicadores:
+
+- Requisições por status
+- Tipos de solicitações
+- Tempo médio de resposta
+- Filtros e visualizações para análise de dados
+
+---
+
+## 🔔 Notificações
+
+- Envio de **notificações em tempo real** via:
+- WebSocket
+- ou Polling leve
+- Exemplo: `"Sua solicitação de verba foi aprovada!"`
+
+---
+
+## 🧱 Stack Técnica
+
+| Camada         | Tecnologia                          |
+|----------------|--------------------------------------|
+| **Back-end**   | Node.js + Express + Sequelize/Prisma |
+| **Front-end**  | React + Axios + TailwindCSS/Chakra UI|
+| **Banco de Dados** | PostgreSQL ou MySQL             |
+| **Autenticação**| JWT + bcrypt                        |
+
+---
+
+## ⚙️ Funcionalidades Extras
+
+- 📁 Upload de arquivos com **Multer**
+- 🔄 Comunicação em tempo real com **WebSocket**
+- 🐳 Ambiente Docker para desenvolvimento local
+- ☁️ Possibilidade de deploy via **Heroku**
+
+---
+
+## 🚀 Status do Projeto
+
+✅ Em desenvolvimento  
+📌 Projeto com fins **avaliativos** e educativos
+
+---
+
+## 🧑‍💻 Autor
+
+Desenvolvido como parte de um projeto acadêmico na área de **Análise e Desenvolvimento de Sistemas**.
+
