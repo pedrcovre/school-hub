@@ -5,5 +5,5 @@ html {
 }
 
 body {
-  @apply bg-white text-zinc-950
+  @apply bg-white text-zinc-950 h-[200vh];
 }
