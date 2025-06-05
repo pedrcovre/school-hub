@@ -1,70 +1,96 @@
-# Getting Started with Create React App
+📚 Projeto Avaliativo — Sistema de Requisição e Aprovação de Recursos Internos (SmartRequest)
+Este projeto tem como objetivo a criação de um sistema completo para gerenciamento de solicitações internas, aplicável em ambientes como empresas, universidades ou organizações. Ele foi desenvolvido com fins avaliativos, integrando conceitos práticos de desenvolvimento full-stack, autenticação, controle de acesso, banco de dados relacional e comunicação em tempo real.
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+🎯 Objetivo do Sistema
+Facilitar a solicitação e o controle de recursos como:
 
-## Available Scripts
+Materiais
 
-In the project directory, you can run:
+Acessos
 
-### `npm start`
+Verbas
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+Férias
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+Equipamentos
 
-### `npm test`
+Automatizar o processo de aprovação por níveis hierárquicos, com rastreabilidade e transparência.
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+👤 Gestão de Usuários
+Cadastro e login com autenticação segura (JWT + bcrypt)
 
-### `npm run build`
+Perfis com diferentes níveis de permissão:
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+Solicitante: cria e acompanha requisições
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+Aprovador: analisa e aprova/rejeita
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+Admin: gerencia o sistema e visualiza dados analíticos
 
-### `npm run eject`
+📝 Funcionalidades de Solicitação
+Criação de requisições com:
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+Título
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+Descrição
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+Tipo
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+Prioridade
 
-## Learn More
+Data limite
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+Upload de anexos (PDF ou imagem)
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+Visualização de histórico completo de solicitações
 
-### Code Splitting
+✅ Processo de Aprovação
+Aprovadores visualizam requisições pendentes
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+Ações disponíveis:
 
-### Analyzing the Bundle Size
+Aprovar
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+Rejeitar
 
-### Making a Progressive Web App
+Devolver com comentário para ajustes
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+Fluxo de status:
 
-### Advanced Configuration
+Pendente → Em análise → Aprovado / Rejeitado / Devolvido
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+📊 Painel Administrativo
+Dashboard interativo com gráficos e indicadores:
 
-### Deployment
+Quantidade de requisições por status
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+Tipos de solicitações
 
-### `npm run build` fails to minify
+Tempo médio de resposta
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+🔔 Notificações
+Atualizações em tempo real via:
+
+WebSocket
+
+ou Polling leve
+
+Exemplo de notificação: “Sua solicitação de verba foi aprovada!”
+
+🧱 Tecnologias Utilizadas (Stack)
+Back-end: Node.js + Express + Sequelize ou Prisma
+
+Banco de Dados: PostgreSQL ou MySQL
+
+Front-end: React + Axios + TailwindCSS ou Chakra UI
+
+Autenticação: JWT + bcrypt
+
+🛠️ Extras e Integrações
+Upload de arquivos com Multer
+
+Comunicação em tempo real com WebSocket
+
+Docker para ambiente local
+
+Deploy possível via Heroku
