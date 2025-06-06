@@ -1,9 +1,14 @@
-@import "tailwindcss";
+@import 'tailwindcss';
+
+@theme {
+  --font-poppins: Poppins, sans-serif;
+}
+
 
 html {
   scroll-behavior: smooth;
 }
 
 body {
-  @apply bg-white text-zinc-950 h-[200vh];
+  @apply bg-white text-zinc-950 h-[200vh] font-poppins;
 }
