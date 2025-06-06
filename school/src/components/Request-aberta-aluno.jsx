@@ -1,12 +1,10 @@
-import Nav from "./Nav";
 import React from "react";
 
 const Requestabertaaluno = () => {
   return (
     <>
-      <Nav />
-      <div class="flex items-center justify-center min-h-screen">
-        <div class="bg-[#ebeff3] rounded-2xl p-16 w-7/8 my-10 h-lvh">
+      <div class="flex items-center justify-center">
+        <div class="bg-[#ebeff3] rounded-2xl p-16 w-7/8 my-10 min-h-[800px]">
         <div class="flex flex-row  justify-between">
         <div class="w-2/5">
             <p class="text-gray-600 text-2xl font-medium">RAFAEL GOMES</p>
@@ -30,7 +28,7 @@ const Requestabertaaluno = () => {
             </a>
         </div>
         </div>
-        <div class="flex flex-row  justify-around items-end h-2/6">
+        <div class="flex flex-row  justify-around items-end mt-40">
             <a href="#" class="flex flex-row items-center justify-center rounded-xl p-4 bg-[#d0d9e3] w-2/8 mt-2 hover:text-white hover:bg-black">
             <span class="material-symbols-outlined">edit</span>
             <p class="text-xl font-bold">EDITAR</p>

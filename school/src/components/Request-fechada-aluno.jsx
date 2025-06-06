@@ -1,12 +1,10 @@
-import Nav from "./Nav";
 import React from "react";
 
 const Requestfechadaaluno = () => {
   return (
     <>
-      <Nav />
-      <div class="flex items-center justify-center min-h-screen">
-        <div class="bg-[#ebeff3] rounded-2xl p-16 w-7/8 my-10 h-lvh flex flex-row justify-between">
+      <div class="flex items-center justify-center">
+        <div class="bg-[#ebeff3] rounded-2xl p-16 w-7/8 my-10 min-h-[800px] flex flex-row justify-between">
         <div class="w-2/5">
             <p class="text-gray-600 text-2xl font-medium">RAFAEL GOMES</p>
             <h1 class="text-4xl font-medium my-2">Remover PC</h1>
