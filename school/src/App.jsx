@@ -1,9 +1,14 @@
 import Navbar from "./components/Navbar"
-import React from 'react'
+import RequestCard from "./components/RequestCard"
 
 const App = () => {
   return (
-    <Navbar/>
+    <>
+      <Navbar />
+      <main>
+        <RequestCard />
+      </main>
+    </>
   )
 }
 
