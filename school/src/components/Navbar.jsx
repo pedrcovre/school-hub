@@ -10,7 +10,7 @@ const Navbar = () => {
         <div className='flex items-center gap-5'>
           <a href='/'>
             <img
-              src='src/assets/logo.svg'
+              src='/logo.svg'
               className='w-[50px]'
               alt='School Hub'
             />

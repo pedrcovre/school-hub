@@ -1,12 +1,12 @@
-import Navbar from "./components/Navbar"
-import RequestCard from "./components/RequestCard"
+import { Navbar } from './components'
+import { NewRequest } from './components'
 
 const App = () => {
   return (
     <>
       <Navbar />
       <main>
-        <RequestCard />
+        <NewRequest />
       </main>
     </>
   )
