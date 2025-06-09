@@ -1,12 +1,11 @@
 import Navbar from "./components/Navbar"
-import RequestCard from "./components/RequestCard"
-
+import Login from "./pages/Login"
+  
 const App = () => {
   return (
     <>
-      <Navbar />
       <main>
-        <RequestCard />
+        <Login />
       </main>
     </>
   )
