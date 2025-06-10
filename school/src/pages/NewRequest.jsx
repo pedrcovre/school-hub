@@ -192,7 +192,7 @@ const NewRequest = () => {
                 className='cursor-pointer text-zinc-950 text-xl border border-black/20 rounded-lg p-3 flex items-center justify-between bg-white hover:bg-gray-100 transition-colors select-none'
               >
                 Faça um upload
-                <span className='material-symbols-outlined text-3xl text-zinc-950'>
+                <span className='material-symbols-rounded text-3xl text-zinc-950'>
                   upload_file
                 </span>
               </label>
