@@ -9,5 +9,5 @@ html {
 }
 
 body {
-  @apply bg-white text-zinc-950 h-[200vh] font-poppins;
+  @apply bg-white text-zinc-950 h-[200vh] fixed inset-0 z-50 font-poppins overflow-hidden;
 }
