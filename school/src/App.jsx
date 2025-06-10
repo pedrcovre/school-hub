@@ -1,5 +1,5 @@
 import Navbar from "./components/Navbar"
-import Login from "./pages/Login"
+import Login from "./pages/resource"
   
 const App = () => {
   return (
