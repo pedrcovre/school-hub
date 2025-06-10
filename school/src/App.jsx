@@ -1,5 +1,4 @@
-import { Navbar } from './components'
-import { NewRequest } from './components'
+import { Navbar, NewRequest } from './components'
 
 const App = () => {
   return (
