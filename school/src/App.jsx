@@ -1,11 +1,11 @@
-import Navbar from "./components/Navbar"
-import Login from "./pages/Login"
-  
+import { Navbar, NewRequest } from './components'
+
 const App = () => {
   return (
     <>
+      <Navbar />
       <main>
-        <Login />
+        <NewRequest />
       </main>
     </>
   )

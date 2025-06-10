@@ -1,7 +1,7 @@
 import { useState } from "react";
 
 const Login = () => {
-    const [visibility, setVisibility] = useState({});
+  const [visibility, setVisibility] = useState({})
 
     return (
         <div className="m-[30px] flex min-h-screen select-none">
