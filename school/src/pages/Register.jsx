@@ -1,6 +1,9 @@
 import { useForm } from 'react-hook-form'
+import { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import PasswordInput from '../components/PasswordInput'
 import EmailInput from '../components/EmailInput'
+import { useAuth } from '../contexts/AuthContext'
 
 const Register = () => {
   const {
@@ -9,8 +12,30 @@ const Register = () => {
     formState: { errors }
   } = useForm()
 
-  const onSubmit = data => {
-    console.log('Form enviado:', data)
+  const { registerUser } = useAuth()
+  const navigate = useNavigate()
+  const [isLoading, setIsLoading] = useState(false)
+  const [feedback, setFeedback] = useState({ message: '', isError: false })
+
+  const onSubmit = async data => {
+    setIsLoading(true)
+    setFeedback({ message: '', isError: false })
+
+    try {
+      const response = await registerUser(
+        data.matricula,
+        data.email,
+        data.password
+      )
+      setFeedback({
+        message: `${response.message} Você já pode fazer login.`,
+        isError: false
+      })
+    } catch (error) {
+      setFeedback({ message: error.message, isError: true })
+    } finally {
+      setIsLoading(false)
+    }
   }
 
   return (
@@ -36,8 +61,15 @@ const Register = () => {
           <div className='w-full max-w-[450px] mb-6'>
             <label className='mb-2 font-medium block'>Matrícula</label>
             <input
-              {...register('matricula', { required: 'Campo obrigatório' })}
+              {...register('matricula', {
+                required: 'Campo obrigatório',
+                pattern: {
+                  value: /^[0-9]+$/,
+                  message: 'Matrícula invalida'
+                }
+              })}
               type='text'
+              inputMode='numeric'
               placeholder='Digite sua matrícula'
               className={`w-full h-[60px] p-3 border rounded-lg focus:outline-none ${
                 errors.matricula ? 'border-red-500' : 'border-black/20'
@@ -51,23 +83,38 @@ const Register = () => {
           </div>
 
           <EmailInput register={register} errors={errors} />
-
           <PasswordInput register={register} errors={errors} />
 
           <div className='w-full max-w-[450px] mt-12'>
             <button
               type='submit'
-              className='w-full h-[52px] bg-[#5CA4F5] rounded-lg text-white text-sm font-medium mb-4 cursor-pointer transition-all duration-200 hover:bg-blue-600 hover:h-[56px]'
+              disabled={isLoading}
+              className='w-full h-[52px] bg-[#5CA4F5] rounded-lg text-white text-sm font-medium mb-4 cursor-pointer transition-all duration-200 hover:bg-blue-600 disabled:bg-gray-400 disabled:cursor-not-allowed'
             >
-              Entrar
+              {isLoading ? 'Criando conta...' : 'Criar conta'}
             </button>
           </div>
 
-          <div className='text-[15px] mt-2'>
+          {feedback.message && (
+            <div
+              className={`w-full max-w-[450px] p-3 rounded-lg text-center ${
+                feedback.isError
+                  ? 'bg-red-100 text-red-700'
+                  : 'bg-green-100 text-green-700'
+              }`}
+            >
+              {feedback.message}
+            </div>
+          )}
+
+          <div className='text-sm mt-2'>
             Já tem uma conta?
-            <a className='text-black/60 underline font-medium cursor-pointer'>
+            <span
+              onClick={() => navigate('/login')}
+              className='text-black/60 underline font-medium cursor-pointer ml-1'
+            >
               Acesse sua conta
-            </a>
+            </span>
           </div>
 
           <footer className='text-sm mt-10 text-center w-full max-w-[450px]'>
@@ -80,7 +127,7 @@ const Register = () => {
         <img
           src='/src/assets/image-register.jpg'
           alt='Foto Pessoas'
-          className='w-full h-full object-cover rounded-lg'
+          className='w-full h-[860px] object-cover rounded-lg'
         />
       </div>
     </div>

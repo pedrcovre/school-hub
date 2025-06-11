@@ -5,6 +5,8 @@ import Register from "../pages/Register";
 import Resource from "../pages/Resource";
 import Login from "../pages/Login";
 import ChangePassword from "../pages/ChangePassword";
+import Layout from "./Layout";
+import ProtectedRoute from "./ProtectedRoute";
 
 export {
     Navbar,
@@ -13,5 +15,7 @@ export {
     Register,
     Login,
     Resource,
-    ChangePassword
+    ChangePassword,
+    Layout,
+    ProtectedRoute
 }

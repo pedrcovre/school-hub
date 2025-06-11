@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react'
-import Navbar from '../components/Navbar'
 
 const itemsPerPage = 5
 
@@ -57,7 +56,6 @@ const Resource = () => {
 
   return (
     <>
-      <Navbar />
       <div className='min-h-screen p-10 justify-items-center'>
         <h1 className='text-[32px] lg:text-[40px] font-medium mb-6'>
           Meus Recursos

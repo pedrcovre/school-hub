@@ -1,6 +1,9 @@
 import { useForm } from 'react-hook-form'
+import { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import PasswordInput from '../components/PasswordInput'
 import EmailInput from '../components/EmailInput'
+import { useAuth } from '../contexts/AuthContext'
 
 const Login = () => {
   const {
@@ -9,18 +12,27 @@ const Login = () => {
     formState: { errors }
   } = useForm()
 
-  const onSubmit = data => {
-    console.log('Form enviado:', data)
+  const navigate = useNavigate()
+  const { login } = useAuth()
+  const [isLoading, setIsLoading] = useState(false)
+  const [loginError, setLoginError] = useState('')
+
+  const onSubmit = async data => {
+    setIsLoading(true)
+    setLoginError('')
+    try {
+      await login(data.email, data.password)
+    } catch (error) {
+      setLoginError(error.message)
+    } finally {
+      setIsLoading(false)
+    }
   }
 
   return (
     <div className='flex flex-col lg:flex-row min-h-screen select-none m-[20px] lg:m-[30px]'>
       <div>
-        <img
-          src='/logo.svg'
-          alt='Logo'
-          className='w-14 mb-4 lg:mb-0'
-        />
+        <img src='/logo.svg' alt='Logo' className='w-14 mb-4 lg:mb-0' />
       </div>
 
       <form
@@ -38,10 +50,8 @@ const Login = () => {
 
         <div className='flex flex-col items-center mt-10 w-full'>
           <EmailInput register={register} errors={errors} />
-
           <div className='w-full max-w-[450px]'>
             <PasswordInput register={register} errors={errors} />
-
             <a className='text-sm text-black/60 underline cursor-pointer inline-block'>
               Esqueceu sua senha?
             </a>
@@ -50,17 +60,25 @@ const Login = () => {
           <div className='w-full max-w-[450px] mt-6'>
             <button
               type='submit'
-              className='w-full h-[52px] bg-[#5CA4F5] rounded-lg text-white text-sm font-medium mb-4 cursor-pointer transition-all duration-200 hover:bg-blue-600 hover:h-[56px]'
+              disabled={isLoading}
+              className='w-full h-[52px] bg-[#5CA4F5] rounded-lg text-white text-sm font-medium mb-4 cursor-pointer transition-all duration-200 hover:bg-blue-600 disabled:bg-gray-400'
             >
-              Entrar
+              {isLoading ? 'Entrando...' : 'Entrar'}
             </button>
           </div>
 
+          {loginError && (
+            <p className='text-red-500 text-sm mt-2'>{loginError}</p>
+          )}
+
           <div className='text-sm mt-2'>
-            Já tem uma conta?
-            <a className='text-black/60 underline font-medium cursor-pointer'>
-              Acesse sua conta
-            </a>
+            Não tem uma conta?
+            <span
+              onClick={() => navigate('/register')}
+              className='text-black/60 underline font-medium cursor-pointer ml-1'
+            >
+              Cadastre-se
+            </span>
           </div>
 
           <footer className='text-sm mt-10 text-center w-full max-w-[450px]'>
