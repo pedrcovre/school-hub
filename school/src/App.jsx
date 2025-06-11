@@ -1,12 +1,12 @@
 import Navbar from "./components/Navbar"
 import Login from "./pages/Login"
+import Logon from "./pages/Logon"
   
 const App = () => {
   return (
     <>
-      <Navbar />
       <main>
-        <NewRequest />
+        <Logon />
       </main>
     </>
   )
