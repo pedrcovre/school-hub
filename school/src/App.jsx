@@ -1,11 +1,10 @@
-import { Login, Navbar, NewRequest } from './components'
+import { Register, Navbar, NewRequest, Resource, Login, ChangePassword } from './components'
 
 const App = () => {
   return (
     <>
-    <Navbar/>
       <main>
-        <NewRequest/>
+        <Login />
       </main>
     </>
   )

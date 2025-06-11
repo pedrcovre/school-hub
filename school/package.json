@@ -14,6 +14,7 @@
     "@tailwindcss/vite": "^4.1.8",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
+    "react-hook-form": "^7.57.0",
     "tailwind-scrollbar": "^4.0.2"
   },
   "devDependencies": {
