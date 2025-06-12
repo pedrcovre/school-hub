@@ -9,15 +9,25 @@ const Resource = () => {
   useEffect(() => {
     const fetchData = async () => {
       const fakeData = [
-        { nome: 'Rafael Gomes', tipo: 'SQL - Modelagem', data: '2025-06-04' },
-        { nome: 'Ana Cardoso', tipo: 'POO - Java', data: '2025-06-02' },
-        { nome: 'Lucas Souza', tipo: 'Redes', data: '2025-06-01' },
+        { nome: 'Rafael Gomes', 
+          tipo: 'SQL - Modelagem', 
+          data: '2025-06-04' },
+
+        { nome: 'Ana Cardoso', 
+          tipo: 'POO - Java', 
+          data: '2025-06-02' },
+
+        { nome: 'Lucas Souza', 
+          tipo: 'Redes', 
+          data: '2025-06-01' },
         {
           nome: 'Anderson Vieira',
           tipo: 'Engenharia de Software',
           data: '2025-05-30'
         },
-        { nome: 'Sophia Dornelles', tipo: 'Algoritmos', data: '2025-05-28' },
+        { nome: 'Sophia Dornelles', 
+          tipo: 'Algoritmos', 
+          data: '2025-05-28' },
         {
           nome: 'Matheus Trevisan',
           tipo: 'Banco de Dados',
@@ -61,26 +71,26 @@ const Resource = () => {
           Meus Recursos
         </h1>
 
-        <div className='flex justify-center overflow-x-auto text-center w-1/2 mx-auto rounded-2xl border border-gray-200'>
-          <table className='min-w-full bg-white shadow-md rounded-xl'>
+        <div className='w-1/2 mx-auto rounded-2xl border border-gray-200'>
+          <table className='min-w-full text-center bg-white shadow-md rounded-xl'>
             <thead>
-              <tr className='text-black border-b border-gray-200'>
-                <th className='p-4'>Nome</th>
-                <th className='p-4'>Tipo de Recurso</th>
-                <th className='p-4'>Data</th>
-                <th className='p-4'>Ação</th>
+              <tr className='text-black border-b border-gray-200 flex justify-around items-center'>
+                <th className='py-4 w-40'>Nome</th>
+                <th className='py-4 w-40'>Tipo de Recurso</th>
+                <th className='py-4 w-40'>Data</th>
+                <th className='py-4 w-40'>Ação</th>
               </tr>
             </thead>
             <tbody>
               {currentItems.map((item, index) => (
                 <tr
                   key={index}
-                  className='hover:bg-gray-50 border-b border-gray-200'
+                  className='hover:bg-gray-50 border-b border-gray-200 flex justify-around items-center'
                 >
-                  <td className='p-4'>{item.nome}</td>
-                  <td className='p-4'>{item.tipo}</td>
-                  <td className='p-4'>{item.data}</td>
-                  <td className='p-4'>
+                  <td className=' py-4 w-40'>{item.nome}</td>
+                  <td className='py-4 w-40'>{item.tipo}</td>
+                  <td className='py-4 w-40'>{item.data}</td>
+                  <td className='py-4 w-36'>
                     <button className='flex items-center p-2 rounded-lg text-sm bg-gray-200 font-medium group cursor-pointer'>
                       <span className='group-hover:underline'>Download</span>
                       <span className='ml-2 material-symbols-rounded'>

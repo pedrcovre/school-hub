@@ -1,6 +1,6 @@
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
 import { AuthProvider, useAuth } from './contexts/AuthContext'
-import { Register, Login, Resource, Layout, ProtectedRoute } from './components'
+import { Register, Login, Resource, Request, Layout, ProtectedRoute } from './components'
 
 const AppRoutes = () => {
   const { user } = useAuth()
