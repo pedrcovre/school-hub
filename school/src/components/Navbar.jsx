@@ -99,7 +99,7 @@ const Navbar = () => {
             >
               <img
                 src={avatar}
-                className='w-[50px] rounded-full'
+                className='w-[50px] rounded-full cursor-pointer'
                 alt='Avatar'
               />
             </button>
