@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
-import { useAuth } from '../contexts/AuthContext' // <-- IMPORTAR AQUI
+import { useNavigate } from 'react-router-dom' 
+import { useAuth } from '../contexts/AuthContext'
 
 const itemsPerPage = 5
 
@@ -8,6 +9,12 @@ const Resource = () => {
   const [currentPage, setCurrentPage] = useState(1)
   const [selectedTab, setSelectedTab] = useState("Todos")
   const { role } = useAuth()
+  const navigate = useNavigate()
+
+
+  const handleNewRequestClick = () => {
+  navigate('/newrequest')
+  }
 
   useEffect(() => {
     const fetchData = async () => {
@@ -100,7 +107,8 @@ const Resource = () => {
             Minhas Requisições
           </h1>
           {showNewRequestButton && (
-           <button className='bg-[#5CA4F5] text-white px-10 rounded-xl h-12'>
+           <button className='bg-[#5CA4F5] text-white px-10 rounded-xl h-12 cursor-pointer'
+           onClick={handleNewRequestClick}>
             Nova Requisição
           </button>
           )}
