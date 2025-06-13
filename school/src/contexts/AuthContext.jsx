@@ -52,14 +52,15 @@ export const AuthProvider = ({ children }) => {
     setUser(null);
   };
 
-  const value = {
-    user,
-    token,
-    login,
-    logout,
-    registerUser,
-    isAuthenticated: !!token,
-  };
+const value = {
+  user,
+  token,
+  login,
+  logout,
+  registerUser,
+  isAuthenticated: !!token,
+  role: user?.role || null
+}
 
   if (loading) {
     return <div>Carregando...</div>;

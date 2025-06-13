@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import { useAuth } from '../contexts/AuthContext' // <-- IMPORTAR AQUI
 
 const itemsPerPage = 5
 
@@ -6,6 +7,7 @@ const Resource = () => {
   const [resources, setResources] = useState([])
   const [currentPage, setCurrentPage] = useState(1)
   const [selectedTab, setSelectedTab] = useState("Todos")
+  const { role } = useAuth()
 
   useEffect(() => {
     const fetchData = async () => {
@@ -15,43 +17,49 @@ const Resource = () => {
           tipo: 'SQL - Modelagem',
           data: '2025-06-04',
           Status: 'Aprovado',
-          Responsavel: 'Matheus Kilpp'
+          Responsavel: 'Matheus Kilpp',
+          Veredit: vereditar
         },
         {
           id: 'REQ-2025-002',
           tipo: 'SQL - Modelagem',
           data: '2025-06-04',
           Status: 'Recusado',
-          Responsavel: 'Matheus Kilpp'
+          Responsavel: 'Matheus Kilpp',
+          Veredit: vereditar
         },
         {
           id: 'REQ-2025-003',
           tipo: 'SQL - Modelagem',
           data: '2025-06-04',
           Status: 'Pendente',
-          Responsavel: 'Matheus Kilpp'
+          Responsavel: 'Matheus Kilpp',
+          Veredit: vereditar
         },
         {
           id: 'REQ-2025-004',
           tipo: 'Python - Introdução',
           data: '2025-06-01',
           Status: 'Pendente',
-          Responsavel: 'Matheus Kilpp'
+          Responsavel: 'Matheus Kilpp',
+          Veredit: vereditar
         },
         {
           id: 'REQ-2025-005',
           tipo: 'JavaScript - Avançado',
           data: '2025-06-02',
           Status: 'Aprovado',
-          Responsavel: 'Matheus Kilpp'
+          Responsavel: 'Matheus Kilpp',
+          Veredit: vereditar
         },
         {
           id: 'REQ-2025-006',
           tipo: 'HTML - Básico',
           data: '2025-06-03',
           Status: 'Recusado',
-          Responsavel: 'Matheus Kilpp'
-        },
+          Responsavel: 'Matheus Kilpp',
+          Veredit: vereditar
+        },  
       ]
 
       await new Promise(resolve => setTimeout(resolve, 500))
@@ -79,16 +87,23 @@ const Resource = () => {
     if (currentPage > 1) setCurrentPage(prev => prev - 1)
   }
 
+  const vereditar = role === 'admin' ? 'Ver/Editar' : 'Ver'
+  const alunoresponsavel = role === 'admin' ? 'Aluno' : 'Responsavel' 
+  const showNewRequestButton = role !== 'admin'
+
+
   return (
     <>
       <div className='min-h-screen p-10'>
         <div className='flex justify-between mx-[28%] items-center mb-15'>
-        <h1 className='text-[32px] lg:text-[40px] font-medium mb-6 '>
-          Minhas Requisições
-        </h1>
-        <button className='bg-[#5CA4F5] text-white px-10 rounded-xl h-12'>
+          <h1 className='text-[32px] lg:text-[40px] font-medium mb-6'>
+            Minhas Requisições
+          </h1>
+          {showNewRequestButton && (
+           <button className='bg-[#5CA4F5] text-white px-10 rounded-xl h-12'>
             Nova Requisição
-        </button>
+          </button>
+          )}
         </div>
 
         <div className='border-b mx-[27%] flex flex-row gap-15 mb-10 text-[#395F8B]/30 font-semibold'>
@@ -116,7 +131,7 @@ const Resource = () => {
                 <th className='py-4 w-40'>Tipo de Recurso</th>
                 <th className='py-4 w-40'>Data</th>
                 <th className='py-4 w-40'>Status</th>
-                <th className='py-4 w-40'>Responsável</th>
+                <th className='py-4 w-40'>{alunoresponsavel}</th>
                 <th className='py-4 w-40'>Ação</th>
               </tr>
             </thead>
@@ -135,7 +150,7 @@ const Resource = () => {
                     </div>
                   </td>
                   <td className='py-4 w-40'>{item.Responsavel}</td>
-                  <td className='py-4 w-40 cursor-pointer'>Ver</td>
+                  <td className='py-4 w-40 cursor-pointer'>{item.Veredit}</td>
                 </tr>
               ))}
             </tbody>
