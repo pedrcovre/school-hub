@@ -1,15 +1,16 @@
 import React, { useState, useEffect, useRef } from 'react'
+import { Link } from 'react-router-dom'
 import { useAuth } from '../contexts/AuthContext'
 
 const adminSitemap = [
-  { label: 'Requisições', href: '#' },
-  { label: 'Recursos', href: '#' },
+  { label: 'Requisições', href: '/' },
+  { label: 'Recursos', href: '/resource' },
   { label: 'Dashboard', href: '#' }
 ]
 
 const studentSitemap = [
-  { label: 'Requisições', href: '#' },
-  { label: 'Recursos', href: '#' }
+  { label: 'Requisições', href: '/' },
+  { label: 'Recursos', href: '/resource' }
 ]
 
 const Navbar = () => {
@@ -61,9 +62,9 @@ const Navbar = () => {
           <ul className='flex gap-5 text-base ml-5'>
             {sitemap.map(({ label, href }, key) => (
               <li key={key}>
-                <a href={href} className='hover:text-zinc-600 transition'>
+                <Link to={href} className='hover:text-zinc-600 transition'>
                   {label}
-                </a>
+                </Link>
               </li>
             ))}
           </ul>
