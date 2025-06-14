@@ -3,7 +3,6 @@ import { Navigate, useLocation } from 'react-router-dom'
 import { useAuth } from '../contexts/AuthContext'
 
 /**
- * 
  * @param {object} props 
  * @param {React.ReactNode} props.children 
  */

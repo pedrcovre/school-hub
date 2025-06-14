@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useLocation } from 'react-router-dom'
 import { useAuth } from '../contexts/AuthContext'
+import { useSearch } from '../contexts/SearchContext'
 
 const adminSitemap = [
   { label: 'Requisições', href: '/' },
@@ -15,7 +16,12 @@ const studentSitemap = [
 
 const Navbar = () => {
   const { user, logout } = useAuth()
+  const { searchTerm, setSearchTerm } = useSearch()
+  const location = useLocation()
   const [isDropdownOpen, setIsDropdownOpen] = useState(false)
+
+  const showSearchBar =
+    location.pathname === '/' || location.pathname.includes('/resource')
 
   const dropdownRef = useRef(null)
 
@@ -71,24 +77,26 @@ const Navbar = () => {
         </div>
 
         <div className='flex items-center gap-6'>
-          <form className='flex items-center bg-[#395F8B1A] rounded-lg px-3 w-[263px] h-[50px]'>
-            <img
-              src='src/assets/search.svg'
-              alt='search'
-              className='w-[25px]'
-            />
-            <input
-              type='text'
-              placeholder='Buscar'
-              className='ml-3 w-full bg-transparent text-zinc-950 text-base focus:outline-none'
-            />
-          </form>
+          {showSearchBar && (
+            <div className='relative'>
+              <span className='material-symbols-rounded absolute left-3 top-1/2 -translate-y-1/2 text-zinc-700'>
+                search
+              </span>
+              <input
+                type='text'
+                value={searchTerm}
+                onChange={e => setSearchTerm(e.target.value)}
+                placeholder='Buscar'
+                className='pl-10 pr-4 py-2 h-[50px] w-64 bg-[#395F8B1A] rounded-lg active:outline-none focus:outline-none transition'
+              />
+            </div>
+          )} 
 
           <button
             type='button'
             className='flex items-center justify-center bg-[#395F8B1A] rounded-lg px-3 w-[50px] h-[50px]'
           >
-            <span className='material-symbols-rounded text-zinc-950'>
+            <span className='material-symbols-rounded text-zinc-700'>
               notifications
             </span>
           </button>

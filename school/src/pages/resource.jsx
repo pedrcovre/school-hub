@@ -1,33 +1,26 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useMemo } from 'react'
+import DataTable from '../components/DataTable'
+import { useSearch } from '../contexts/SearchContext'
 
-const itemsPerPage = 5
+const ITEMS_PER_PAGE = 5
 
 const Resource = () => {
   const [resources, setResources] = useState([])
   const [currentPage, setCurrentPage] = useState(1)
+  const { searchTerm } = useSearch()
 
   useEffect(() => {
     const fetchData = async () => {
       const fakeData = [
-        { nome: 'Rafael Gomes', 
-          tipo: 'SQL - Modelagem', 
-          data: '2025-06-04' },
-
-        { nome: 'Ana Cardoso', 
-          tipo: 'POO - Java', 
-          data: '2025-06-02' },
-
-        { nome: 'Lucas Souza', 
-          tipo: 'Redes', 
-          data: '2025-06-01' },
+        { nome: 'Rafael Gomes', tipo: 'SQL - Modelagem', data: '2025-06-04' },
+        { nome: 'Ana Cardoso', tipo: 'POO - Java', data: '2025-06-02' },
+        { nome: 'Lucas Souza', tipo: 'Redes', data: '2025-06-01' },
         {
           nome: 'Anderson Vieira',
           tipo: 'Engenharia de Software',
           data: '2025-05-30'
         },
-        { nome: 'Sophia Dornelles', 
-          tipo: 'Algoritmos', 
-          data: '2025-05-28' },
+        { nome: 'Sophia Dornelles', tipo: 'Algoritmos', data: '2025-05-28' },
         {
           nome: 'Matheus Trevisan',
           tipo: 'Banco de Dados',
@@ -44,87 +37,87 @@ const Resource = () => {
           data: '2025-05-24'
         }
       ]
-
       await new Promise(resolve => setTimeout(resolve, 500))
       setResources(fakeData)
     }
-
     fetchData()
   }, [])
 
-  const totalPages = Math.ceil(resources.length / itemsPerPage)
-  const startIndex = (currentPage - 1) * itemsPerPage
-  const currentItems = resources.slice(startIndex, startIndex + itemsPerPage)
+  const filteredResources = useMemo(() => {
+    return resources.filter(
+      resource =>
+        resource.nome.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        resource.tipo.toLowerCase().includes(searchTerm.toLowerCase())
+    )
+  }, [resources, searchTerm])
 
-  const nextPage = () => {
-    if (currentPage < totalPages) setCurrentPage(prev => prev + 1)
-  }
+  const currentItems = useMemo(() => {
+    const startIndex = (currentPage - 1) * ITEMS_PER_PAGE
+    return filteredResources.slice(startIndex, startIndex + ITEMS_PER_PAGE)
+  }, [filteredResources, currentPage])
 
-  const prevPage = () => {
-    if (currentPage > 1) setCurrentPage(prev => prev - 1)
-  }
+  const totalPages = Math.ceil(filteredResources.length / ITEMS_PER_PAGE)
+
+  const headers = ['Nome', 'Tipo de Recurso', 'Data', 'Ação']
 
   return (
-    <>
-      <div className='min-h-screen p-10 justify-items-center'>
-        <h1 className='text-[32px] lg:text-[40px] font-medium mb-6'>
-          Meus Recursos
-        </h1>
-
-        <div className='w-1/2 mx-auto rounded-2xl border border-gray-200'>
-          <table className='min-w-full text-center bg-white shadow-md rounded-xl'>
-            <thead>
-              <tr className='text-black border-b border-gray-200 flex justify-around items-center'>
-                <th className='py-4 w-40'>Nome</th>
-                <th className='py-4 w-40'>Tipo de Recurso</th>
-                <th className='py-4 w-40'>Data</th>
-                <th className='py-4 w-40'>Ação</th>
-              </tr>
-            </thead>
-            <tbody>
-              {currentItems.map((item, index) => (
-                <tr
-                  key={index}
-                  className='hover:bg-gray-50 border-b border-gray-200 flex justify-around items-center'
-                >
-                  <td className=' py-4 w-40'>{item.nome}</td>
-                  <td className='py-4 w-40'>{item.tipo}</td>
-                  <td className='py-4 w-40'>{item.data}</td>
-                  <td className='py-4 w-36'>
-                    <button className='flex items-center p-2 rounded-lg text-sm bg-gray-200 font-medium group cursor-pointer'>
-                      <span className='group-hover:underline'>Download</span>
-                      <span className='ml-2 material-symbols-rounded'>
-                        download
-                      </span>
-                    </button>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+    <div className='min-h-screen'>
+      <div className='max-w-7xl mx-auto p-4 sm:p-6 lg:p-8'>
+        <div className='flex flex-col sm:flex-row justify-between items-center mb-8'>
+          <h1 className='text-3xl lg:text-4xl font-bold text-black mb-4 sm:mb-0'>
+            Meus Recursos
+          </h1>
         </div>
 
-        <div className='flex justify-center items-center mt-6 gap-4'>
+        <DataTable
+          headers={headers}
+          items={currentItems}
+          renderRow={(item, index) => (
+            <tr key={index} className='hover:bg-gray-50 transition-colors'>
+              <td className='px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-800'>
+                {item.nome}
+              </td>
+              <td className='px-6 py-4 whitespace-nowrap text-sm text-gray-500'>
+                {item.tipo}
+              </td>
+              <td className='px-6 py-4 whitespace-nowrap text-sm text-gray-500'>
+                {item.data}
+              </td>
+              <td className='px-6 py-4 whitespace-nowrap text-sm'>
+                <button className='flex items-center gap-2 text-zinc-600 font-semibold hover:text-zinc-800 hover:cursor-pointer'>
+                  <span className='material-symbols-rounded'>download</span>
+                  <span>Download</span>
+                </button>
+              </td>
+            </tr>
+          )}
+        />
+
+        <div className='flex justify-center items-center mt-8 gap-4'>
           <button
-            onClick={prevPage}
+            onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
             disabled={currentPage === 1}
-            className='flex px-2 items-center py-2 rounded-lg bg-gray-300 hover:bg-gray-400 disabled:opacity-50'
+            className='px-3 py-2 rounded-lg bg-white border border-gray-300 hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed'
           >
-            <span className='material-symbols-outlined'>arrow_back</span>
+            <span className='material-symbols-outlined text-lg'>
+              arrow_back
+            </span>
           </button>
-          <span className='text-base font-medium'>
-            Página {currentPage} de {totalPages}
+          <span className='text-base font-medium text-gray-700'>
+            Página {currentPage} de {totalPages || 1}
           </span>
           <button
-            onClick={nextPage}
-            disabled={currentPage === totalPages}
-            className='flex px-2 items-center py-2 rounded-lg bg-gray-300 hover:bg-gray-400 disabled:opacity-50'
+            onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
+            disabled={currentPage === totalPages || totalPages === 0}
+            className='px-3 py-2 rounded-lg bg-white border border-gray-300 hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed'
           >
-            <span className='material-symbols-outlined'>arrow_forward</span>
+            <span className='material-symbols-outlined text-lg'>
+              arrow_forward
+            </span>
           </button>
         </div>
       </div>
-    </>
+    </div>
   )
 }
 
