@@ -73,12 +73,17 @@ exports.login = async (req, res) => {
     }
 
     const payload = { id: user.Id, name: user.Name, role: user.Role }
-
     const token = jwt.sign(payload, JWT_SECRET, { expiresIn: '1h' })
 
     res.json({
       token,
-      user: { id: user.Id, name: user.Name, email: user.Email, role: user.Role }
+      user: {
+        id: user.Id,
+        name: user.Name,
+        email: user.Email,
+        role: user.Role,
+        avatarUrl: user.avatar_path // <-- A LINHA QUE RESOLVE TUDO
+      }
     })
   } catch (error) {
     console.error('Erro no login:', error)

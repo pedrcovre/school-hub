@@ -152,7 +152,7 @@ const Request = () => {
                     ID
                   </th>
                   <th className='px-6 py-4 text-left text-xs font-bold text-black uppercase tracking-wider'>
-                    Tipo de Recurso
+                    Tipo de Requisição
                   </th>
                   <th className='px-6 py-4 text-left text-xs font-bold text-black uppercase tracking-wider'>
                     Data
