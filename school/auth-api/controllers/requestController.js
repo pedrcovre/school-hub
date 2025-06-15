@@ -1,9 +1,11 @@
 const { poolPromise, sql } = require('../db')
 
 const getAllRequests = async (req, res) => {
+  const { id: userId, role } = req.user
+
   try {
     const pool = await poolPromise
-    const result = await pool.request().query(`
+    let query = `
       SELECT 
         r.id, 
         r.type AS tipo, 
@@ -12,8 +14,18 @@ const getAllRequests = async (req, res) => {
         ISNULL(u.name, 'Não definido') AS responsavel
       FROM requests r
       LEFT JOIN users u ON r.approved_by = u.id
-      ORDER BY r.created_at DESC
-    `)
+    `
+    const request = pool.request()
+
+    if (role === 'admin') {
+      query += ' ORDER BY r.created_at DESC'
+    } else {
+      query += ' WHERE r.student_id = @userId ORDER BY r.created_at DESC'
+      request.input('userId', sql.Int, userId)
+    }
+
+    const result = await request.query(query)
+
     res.json(result.recordset)
   } catch (error) {
     console.error('Erro ao buscar requisições:', error)
@@ -23,7 +35,6 @@ const getAllRequests = async (req, res) => {
 
 const createRequest = async (req, res) => {
   const { student_id, type, title, urgency, reason } = req.body
-
   const file_path = req.file ? req.file.path : null
 
   try {

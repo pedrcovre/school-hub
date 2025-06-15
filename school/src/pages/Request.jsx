@@ -2,6 +2,7 @@ import { useEffect, useState, useMemo } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../contexts/AuthContext'
 import { useSearch } from '../contexts/SearchContext'
+import axios from 'axios'
 
 const StatusBadge = ({ status }) => {
   let colorClass = ''
@@ -26,7 +27,9 @@ const StatusBadge = ({ status }) => {
   }
 
   return (
-    <span className={`px-3 py-1 rounded-full text-xs font-semibold ${colorClass}`}>
+    <span
+      className={`px-3 py-1 rounded-full text-xs font-semibold ${colorClass}`}
+    >
       {label}
     </span>
   )
@@ -39,22 +42,31 @@ const Request = () => {
   const [Requests, setRequests] = useState([])
   const [currentPage, setCurrentPage] = useState(1)
   const [selectedTab, setSelectedTab] = useState(TABS[0])
-  const { role } = useAuth()
+  const { role, token } = useAuth()
   const navigate = useNavigate()
   const { searchTerm } = useSearch()
 
   useEffect(() => {
     const fetchData = async () => {
+      if (!token) {
+        return
+      }
+
       try {
-        const response = await fetch('http://localhost:5000/api/requests')
-        const data = await response.json()
-        setRequests(data)
+        const response = await axios.get('http://localhost:5000/api/requests', {
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        })
+        setRequests(response.data)
       } catch (error) {
         console.error('Erro ao buscar requisições:', error)
       }
     }
     fetchData()
-  }, [])
+  }, [token])
+
+  console.log('VERIFICANDO O TOKEN DENTRO DO COMPONENTE:', token)
 
   const filteredRequests = useMemo(() => {
     let filteredByTab = Requests
@@ -73,7 +85,10 @@ const Request = () => {
 
     return filteredByTab.filter(
       request =>
-        request.id.toString().toLowerCase().includes(searchTerm.toLowerCase()) ||
+        request.id
+          .toString()
+          .toLowerCase()
+          .includes(searchTerm.toLowerCase()) ||
         request.tipo.toLowerCase().includes(searchTerm.toLowerCase()) ||
         request.responsavel.toLowerCase().includes(searchTerm.toLowerCase())
     )
@@ -191,7 +206,9 @@ const Request = () => {
             disabled={currentPage === 1}
             className='px-3 py-2 rounded-lg bg-white border border-gray-300 hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed'
           >
-            <span className='material-symbols-outlined text-lg'>arrow_back</span>
+            <span className='material-symbols-outlined text-lg'>
+              arrow_back
+            </span>
           </button>
           <span className='text-base font-medium text-gray-700'>
             Página {currentPage} de {totalPages || 1}
@@ -201,7 +218,9 @@ const Request = () => {
             disabled={currentPage === totalPages || totalPages === 0}
             className='px-3 py-2 rounded-lg bg-white border border-gray-300 hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed'
           >
-            <span className='material-symbols-outlined text-lg'>arrow_forward</span>
+            <span className='material-symbols-outlined text-lg'>
+              arrow_forward
+            </span>
           </button>
         </div>
       </div>

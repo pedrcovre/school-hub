@@ -1,10 +1,10 @@
 import { useForm } from 'react-hook-form'
-import { useState } from 'react'
 import axios from 'axios'
 import { useAuth } from '../contexts/AuthContext'
 
 const NewRequest = () => {
-  const { user } = useAuth()
+  const { user, token } = useAuth() // 1. Pegue o token do contexto de autenticação
+
   const {
     register,
     handleSubmit,
@@ -37,13 +37,14 @@ const NewRequest = () => {
     }
 
     try {
+      // 2. Adicione o cabeçalho (header) de autorização na chamada POST
       await axios.post('http://localhost:5000/api/requests', formData, {
         headers: {
-          'Content-Type': 'multipart/form-data'
+          'Content-Type': 'multipart/form-data',
+          Authorization: `Bearer ${token}`
         }
       })
       alert('Requisição enviada com sucesso!')
-      // Opcional: redirecionar o usuário ou limpar o formulário aqui
     } catch (error) {
       console.error('Erro ao enviar requisição:', error)
       alert(
