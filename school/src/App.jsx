@@ -1,6 +1,8 @@
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
-import { AuthProvider, useAuth } from './contexts/AuthContext';
-import { SearchProvider } from './contexts/SearchContext';
+// src/App.jsx
+
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
+import { AuthProvider, useAuth } from './contexts/AuthContext'
+import { SearchProvider } from './contexts/SearchContext'
 import {
   Register,
   Login,
@@ -8,16 +10,24 @@ import {
   Request,
   Layout,
   ProtectedRoute,
-  NewRequest
-} from './components';
+  NewRequest,
+  ChangePassword
+} from './components'
 
 const AppRoutes = () => {
-  const { user } = useAuth();
+  const { user } = useAuth()
 
   return (
     <Routes>
       <Route path='/login' element={user ? <Navigate to='/' /> : <Login />} />
-      <Route path='/register' element={user ? <Navigate to='/' /> : <Register />} />
+      <Route
+        path='/register'
+        element={user ? <Navigate to='/' /> : <Register />}
+      />
+      <Route
+        path='/change-password'
+        element={user ? <Navigate to='/' /> : <ChangePassword />} 
+      />
 
       <Route
         path='/'
@@ -28,26 +38,25 @@ const AppRoutes = () => {
         }
       >
         <Route index element={<Request />} />
-
         <Route path='resource' element={<Resource />} />
         <Route path='newrequest' element={<NewRequest />} />
       </Route>
 
       <Route path='*' element={<Navigate to={user ? '/' : '/login'} />} />
     </Routes>
-  );
-};
+  )
+}
 
 const App = () => {
   return (
     <AuthProvider>
       <SearchProvider>
-      <BrowserRouter>
-        <AppRoutes />
-      </BrowserRouter>
+        <BrowserRouter>
+          <AppRoutes />
+        </BrowserRouter>
       </SearchProvider>
     </AuthProvider>
-  );
-};
+  )
+}
 
-export default App;
+export default App

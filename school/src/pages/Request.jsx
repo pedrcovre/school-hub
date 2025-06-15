@@ -3,7 +3,6 @@ import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../contexts/AuthContext'
 import { useSearch } from '../contexts/SearchContext'
 
-// Componente StatusBadge traduzindo os status
 const StatusBadge = ({ status }) => {
   let colorClass = ''
   let label = ''

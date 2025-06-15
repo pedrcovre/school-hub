@@ -1,6 +1,6 @@
 import { useForm } from 'react-hook-form'
 import { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, Link } from 'react-router-dom'
 import PasswordInput from '../components/PasswordInput'
 import EmailInput from '../components/EmailInput'
 import { useAuth } from '../contexts/AuthContext'
@@ -52,9 +52,13 @@ const Login = () => {
           <EmailInput register={register} errors={errors} />
           <div className='w-full max-w-[450px]'>
             <PasswordInput register={register} errors={errors} />
-            <a className='text-sm text-black/60 underline cursor-pointer inline-block'>
+
+            <Link
+              to='/change-password'
+              className='text-sm text-black/60 underline cursor-pointer inline-block hover:text-blue-600'
+            >
               Esqueceu sua senha?
-            </a>
+            </Link>
           </div>
 
           <div className='w-full max-w-[450px] mt-6'>
@@ -73,12 +77,12 @@ const Login = () => {
 
           <div className='text-sm mt-2'>
             Não tem uma conta?
-            <span
-              onClick={() => navigate('/register')}
-              className='text-black/60 underline font-medium cursor-pointer ml-1'
+            <Link
+              to='/register'
+              className='text-black/60 underline font-medium cursor-pointer ml-1 hover:text-blue-600'
             >
               Cadastre-se
-            </span>
+            </Link>
           </div>
 
           <footer className='text-sm mt-10 text-center w-full max-w-[450px]'>
