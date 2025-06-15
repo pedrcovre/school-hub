@@ -1,8 +1,37 @@
 import { useEffect, useState, useMemo } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../contexts/AuthContext'
-import { useSearch } from '../contexts/SearchContext' 
-import StatusBadge from '../components/StatusBadge'
+import { useSearch } from '../contexts/SearchContext'
+
+// Componente StatusBadge traduzindo os status
+const StatusBadge = ({ status }) => {
+  let colorClass = ''
+  let label = ''
+
+  switch (status.toLowerCase()) {
+    case 'pending':
+      colorClass = 'bg-gray-100 text-gray-800'
+      label = 'Pendente'
+      break
+    case 'approved':
+      colorClass = 'bg-green-100 text-green-800'
+      label = 'Aprovado'
+      break
+    case 'rejected':
+      colorClass = 'bg-red-100 text-red-800'
+      label = 'Recusado'
+      break
+    default:
+      colorClass = 'bg-gray-100 text-gray-800'
+      label = status
+  }
+
+  return (
+    <span className={`px-3 py-1 rounded-full text-xs font-semibold ${colorClass}`}>
+      {label}
+    </span>
+  )
+}
 
 const ITEMS_PER_PAGE = 5
 const TABS = ['Todos', 'Aberta', 'Fechado']
@@ -13,77 +42,39 @@ const Request = () => {
   const [selectedTab, setSelectedTab] = useState(TABS[0])
   const { role } = useAuth()
   const navigate = useNavigate()
-  const { searchTerm } = useSearch() 
+  const { searchTerm } = useSearch()
 
   useEffect(() => {
     const fetchData = async () => {
-      const fakeData = [
-        {
-          id: 'REQ-2025-001',
-          tipo: 'SQL - Modelagem',
-          data: '2025-06-04',
-          status: 'Aprovado',
-          responsavel: 'Matheus Kilpp'
-        },
-        {
-          id: 'REQ-2025-002',
-          tipo: 'SQL - Modelagem',
-          data: '2025-06-04',
-          status: 'Recusado',
-          responsavel: 'Matheus Kilpp'
-        },
-        {
-          id: 'REQ-2025-003',
-          tipo: 'SQL - Modelagem',
-          data: '2025-06-04',
-          status: 'Pendente',
-          responsavel: 'Matheus Kilpp'
-        },
-        {
-          id: 'REQ-2025-004',
-          tipo: 'Python - Introdução',
-          data: '2025-06-01',
-          status: 'Pendente',
-          responsavel: 'Matheus Kilpp'
-        },
-        {
-          id: 'REQ-2025-005',
-          tipo: 'JavaScript - Avançado',
-          data: '2025-06-02',
-          status: 'Aprovado',
-          responsavel: 'Matheus Kilpp'
-        },
-        {
-          id: 'REQ-2025-006',
-          tipo: 'HTML - Básico',
-          data: '2025-06-03',
-          status: 'Recusado',
-          responsavel: 'Matheus Kilpp'
-        }
-      ]
-      await new Promise(resolve => setTimeout(resolve, 500))
-      setRequests(fakeData)
+      try {
+        const response = await fetch('http://localhost:5000/api/requests')
+        const data = await response.json()
+        setRequests(data)
+      } catch (error) {
+        console.error('Erro ao buscar requisições:', error)
+      }
     }
     fetchData()
   }, [])
 
   const filteredRequests = useMemo(() => {
     let filteredByTab = Requests
+
     if (selectedTab === 'Aberta') {
-      filteredByTab = Requests.filter(r => r.status === 'Pendente')
+      filteredByTab = Requests.filter(r => r.status.toLowerCase() === 'pending')
     } else if (selectedTab === 'Fechado') {
       filteredByTab = Requests.filter(
-        r => r.status === 'Aprovado' || r.status === 'Recusado'
+        r =>
+          r.status.toLowerCase() === 'approved' ||
+          r.status.toLowerCase() === 'rejected'
       )
     }
 
-    if (!searchTerm) {
-      return filteredByTab
-    }
+    if (!searchTerm) return filteredByTab
 
     return filteredByTab.filter(
       request =>
-        request.id.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        request.id.toString().toLowerCase().includes(searchTerm.toLowerCase()) ||
         request.tipo.toLowerCase().includes(searchTerm.toLowerCase()) ||
         request.responsavel.toLowerCase().includes(searchTerm.toLowerCase())
     )
@@ -167,7 +158,8 @@ const Request = () => {
                 {currentItems.map(item => (
                   <tr
                     key={item.id}
-                    className='hover:bg-gray-50 transition-colors'
+                    className='hover:bg-gray-50 transition-colors cursor-pointer'
+                    onClick={() => navigate(`/requests/${item.id}`)}
                   >
                     <td className='px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-800'>
                       {item.id}
@@ -184,7 +176,7 @@ const Request = () => {
                     <td className='px-6 py-4 whitespace-nowrap text-sm text-gray-500'>
                       {item.responsavel}
                     </td>
-                    <td className='px-6 py-4 whitespace-nowrap text-sm font-semibold text-zinc-600 hover:underline cursor-pointer'>
+                    <td className='px-6 py-4 whitespace-nowrap text-sm font-semibold text-zinc-600 hover:underline'>
                       {actionText}
                     </td>
                   </tr>
@@ -200,9 +192,7 @@ const Request = () => {
             disabled={currentPage === 1}
             className='px-3 py-2 rounded-lg bg-white border border-gray-300 hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed'
           >
-            <span className='material-symbols-outlined text-lg'>
-              arrow_back
-            </span>
+            <span className='material-symbols-outlined text-lg'>arrow_back</span>
           </button>
           <span className='text-base font-medium text-gray-700'>
             Página {currentPage} de {totalPages || 1}
@@ -212,9 +202,7 @@ const Request = () => {
             disabled={currentPage === totalPages || totalPages === 0}
             className='px-3 py-2 rounded-lg bg-white border border-gray-300 hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed'
           >
-            <span className='material-symbols-outlined text-lg'>
-              arrow_forward
-            </span>
+            <span className='material-symbols-outlined text-lg'>arrow_forward</span>
           </button>
         </div>
       </div>
