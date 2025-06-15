@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../contexts/AuthContext'
 import { useSearch } from '../contexts/SearchContext'
 import axios from 'axios'
+import Requestaberta from '../components/Requestaberta'
 
 const StatusBadge = ({ status }) => {
   let colorClass = ''
@@ -27,9 +28,7 @@ const StatusBadge = ({ status }) => {
   }
 
   return (
-    <span
-      className={`px-3 py-1 rounded-full text-xs font-semibold ${colorClass}`}
-    >
+    <span className={`px-3 py-1 rounded-full text-xs font-semibold ${colorClass}`}>
       {label}
     </span>
   )
@@ -42,16 +41,14 @@ const Request = () => {
   const [Requests, setRequests] = useState([])
   const [currentPage, setCurrentPage] = useState(1)
   const [selectedTab, setSelectedTab] = useState(TABS[0])
+  const [selectedRequest, setSelectedRequest] = useState(null)
   const { role, token } = useAuth()
   const navigate = useNavigate()
   const { searchTerm } = useSearch()
 
   useEffect(() => {
     const fetchData = async () => {
-      if (!token) {
-        return
-      }
-
+      if (!token) return
       try {
         const response = await axios.get('http://localhost:5000/api/requests', {
           headers: {
@@ -66,8 +63,6 @@ const Request = () => {
     fetchData()
   }, [token])
 
-  console.log('VERIFICANDO O TOKEN DENTRO DO COMPONENTE:', token)
-
   const filteredRequests = useMemo(() => {
     let filteredByTab = Requests
 
@@ -75,22 +70,16 @@ const Request = () => {
       filteredByTab = Requests.filter(r => r.status.toLowerCase() === 'pending')
     } else if (selectedTab === 'Fechado') {
       filteredByTab = Requests.filter(
-        r =>
-          r.status.toLowerCase() === 'approved' ||
-          r.status.toLowerCase() === 'rejected'
+        r => r.status.toLowerCase() === 'approved' || r.status.toLowerCase() === 'rejected'
       )
     }
 
     if (!searchTerm) return filteredByTab
 
-    return filteredByTab.filter(
-      request =>
-        request.id
-          .toString()
-          .toLowerCase()
-          .includes(searchTerm.toLowerCase()) ||
-        request.tipo.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        request.responsavel.toLowerCase().includes(searchTerm.toLowerCase())
+    return filteredByTab.filter(request =>
+      request.id.toString().toLowerCase().includes(searchTerm.toLowerCase()) ||
+      request.tipo?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      request.responsavel?.toLowerCase().includes(searchTerm.toLowerCase())
     )
   }, [Requests, selectedTab, searchTerm])
 
@@ -109,7 +98,7 @@ const Request = () => {
   }
 
   return (
-    <div className='min-h-screen'>
+    <div className='min-h-screen relative'>
       <div className='max-w-7xl mx-auto p-4 sm:p-6 lg:p-8'>
         <div className='flex flex-col sm:flex-row justify-between items-center mb-8'>
           <h1 className='text-3xl lg:text-4xl font-bold text-black mb-4 sm:mb-0'>
@@ -148,24 +137,12 @@ const Request = () => {
             <table className='min-w-full divide-y divide-gray-200'>
               <thead className='bg-gray-50'>
                 <tr>
-                  <th className='px-6 py-4 text-left text-xs font-bold text-black uppercase tracking-wider'>
-                    ID
-                  </th>
-                  <th className='px-6 py-4 text-left text-xs font-bold text-black uppercase tracking-wider'>
-                    Tipo de Recurso
-                  </th>
-                  <th className='px-6 py-4 text-left text-xs font-bold text-black uppercase tracking-wider'>
-                    Data
-                  </th>
-                  <th className='px-6 py-4 text-left text-xs font-bold text-black uppercase tracking-wider'>
-                    Status
-                  </th>
-                  <th className='px-6 py-4 text-left text-xs font-bold text-black uppercase tracking-wider'>
-                    {responsibleHeaderText}
-                  </th>
-                  <th className='px-6 py-4 text-left text-xs font-bold text-black uppercase tracking-wider'>
-                    Ação
-                  </th>
+                  <th className='px-6 py-4 text-left text-xs font-bold text-black uppercase tracking-wider'>ID</th>
+                  <th className='px-6 py-4 text-left text-xs font-bold text-black uppercase tracking-wider'>Tipo de Recurso</th>
+                  <th className='px-6 py-4 text-left text-xs font-bold text-black uppercase tracking-wider'>Data</th>
+                  <th className='px-6 py-4 text-left text-xs font-bold text-black uppercase tracking-wider'>Status</th>
+                  <th className='px-6 py-4 text-left text-xs font-bold text-black uppercase tracking-wider'>{responsibleHeaderText}</th>
+                  <th className='px-6 py-4 text-left text-xs font-bold text-black uppercase tracking-wider'>Ação</th>
                 </tr>
               </thead>
               <tbody className='bg-white divide-y divide-gray-200'>
@@ -173,23 +150,15 @@ const Request = () => {
                   <tr
                     key={item.id}
                     className='hover:bg-gray-50 transition-colors cursor-pointer'
-                    onClick={() => navigate(`/requests/${item.id}`)}
+                    onClick={() => setSelectedRequest(item)}
                   >
-                    <td className='px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-800'>
-                      {item.id}
-                    </td>
-                    <td className='px-6 py-4 whitespace-nowrap text-sm text-gray-500'>
-                      {item.tipo}
-                    </td>
-                    <td className='px-6 py-4 whitespace-nowrap text-sm text-gray-500'>
-                      {item.data}
-                    </td>
+                    <td className='px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-800'>{item.id}</td>
+                    <td className='px-6 py-4 whitespace-nowrap text-sm text-gray-500'>{item.tipo}</td>
+                    <td className='px-6 py-4 whitespace-nowrap text-sm text-gray-500'>{item.data}</td>
                     <td className='px-6 py-4 whitespace-nowrap'>
                       <StatusBadge status={item.status} />
                     </td>
-                    <td className='px-6 py-4 whitespace-nowrap text-sm text-gray-500'>
-                      {item.responsavel}
-                    </td>
+                    <td className='px-6 py-4 whitespace-nowrap text-sm text-gray-500'>{item.responsavel}</td>
                     <td className='px-6 py-4 whitespace-nowrap text-sm font-semibold text-zinc-600 hover:underline'>
                       {actionText}
                     </td>
@@ -206,9 +175,7 @@ const Request = () => {
             disabled={currentPage === 1}
             className='px-3 py-2 rounded-lg bg-white border border-gray-300 hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed'
           >
-            <span className='material-symbols-outlined text-lg'>
-              arrow_back
-            </span>
+            <span className='material-symbols-outlined text-lg'>arrow_back</span>
           </button>
           <span className='text-base font-medium text-gray-700'>
             Página {currentPage} de {totalPages || 1}
@@ -218,12 +185,21 @@ const Request = () => {
             disabled={currentPage === totalPages || totalPages === 0}
             className='px-3 py-2 rounded-lg bg-white border border-gray-300 hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed'
           >
-            <span className='material-symbols-outlined text-lg'>
-              arrow_forward
-            </span>
+            <span className='material-symbols-outlined text-lg'>arrow_forward</span>
           </button>
         </div>
       </div>
+
+      {selectedRequest && (
+        <Requestaberta
+          data={selectedRequest}
+          onClose={() => setSelectedRequest(null)}
+          onDelete={(deletedId) => {
+            setRequests(prev => prev.filter(req => req.id !== deletedId))
+            setSelectedRequest(null)
+          }}
+        />
+      )}
     </div>
   )
 }

@@ -1,3 +1,4 @@
+// routes/requestRoutes.js
 const express = require('express')
 const router = express.Router()
 const requestController = require('../controllers/requestController')
@@ -14,5 +15,8 @@ router.post(
   upload.single('file'),
   requestController.createRequest
 )
+
+// NOVA ROTA DELETE
+router.delete('/:id', authMiddleware, requestController.deleteRequest)
 
 module.exports = router
