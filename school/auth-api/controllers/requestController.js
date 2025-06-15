@@ -1,8 +1,5 @@
 const { poolPromise, sql } = require('../db')
 
-/**
- * @description
- */
 const getAllRequests = async (req, res) => {
   try {
     const pool = await poolPromise
@@ -24,18 +21,10 @@ const getAllRequests = async (req, res) => {
   }
 }
 
-/**
- * @description
- */
 const createRequest = async (req, res) => {
-  const {
-    student_id,
-    type,
-    title,
-    urgency,
-    reason,
-    file_path = null
-  } = req.body
+  const { student_id, type, title, urgency, reason } = req.body
+
+  const file_path = req.file ? req.file.path : null
 
   try {
     const pool = await poolPromise

@@ -14,6 +14,7 @@
     "@tailwindcss/vite": "^4.1.8",
     "axios": "^1.9.0",
     "cors": "^2.8.5",
+    "multer": "^2.0.1",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
     "react-hook-form": "^7.57.0",

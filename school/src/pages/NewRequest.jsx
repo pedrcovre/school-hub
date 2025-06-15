@@ -1,7 +1,10 @@
 import { useForm } from 'react-hook-form'
 import { useState } from 'react'
+import axios from 'axios'
+import { useAuth } from '../contexts/AuthContext'
 
 const NewRequest = () => {
+  const { user } = useAuth()
   const {
     register,
     handleSubmit,
@@ -9,39 +12,45 @@ const NewRequest = () => {
     formState: { errors, isSubmitting }
   } = useForm({
     defaultValues: {
-      titulo: '',
-      tipo: '',
-      motivo: '',
-      quantidade: '',
-      urgencia: ''
+      title: '',
+      type: '',
+      reason: '',
+      urgency: '',
+      file: null
     }
   })
 
-  const anexoFile = watch('anexo')
-  const anexoFileName = anexoFile?.[0]?.name
+  const attachedFile = watch('file')
+  const attachedFileName = attachedFile?.[0]?.name
 
   const onSubmit = async data => {
     const formData = new FormData()
-    Object.keys(data).forEach(key => {
-      if (key === 'anexo') {
-        formData.append(key, data.anexo[0])
-      } else {
-        formData.append(key, data[key])
-      }
-    })
 
-    console.log('Dados prontos para enviar:', Object.fromEntries(formData))
+    formData.append('student_id', user.id)
+    formData.append('title', data.title)
+    formData.append('type', data.type)
+    formData.append('reason', data.reason)
+    formData.append('urgency', data.urgency)
 
-    await new Promise(resolve => setTimeout(resolve, 1500))
+    if (data.file && data.file[0]) {
+      formData.append('file', data.file[0])
+    }
 
-    // try {
-    //   await axios.post('/api/requests', formData);
-    //   alert('Requisição enviada com sucesso!');
-    // } catch (error) {
-    //   alert('Falha ao enviar a requisição.');
-    // }
+    try {
+      await axios.post('http://localhost:5000/api/requests', formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        }
+      })
+      alert('Requisição enviada com sucesso!')
+      // Opcional: redirecionar o usuário ou limpar o formulário aqui
+    } catch (error) {
+      console.error('Erro ao enviar requisição:', error)
+      alert(
+        'Falha ao enviar a requisição. Verifique o console para mais detalhes.'
+      )
+    }
   }
-
 
   const inputClassName =
     'block w-full rounded-lg border border-gray-300 focus:border-gray-500 focus:ring-gray-500 sm:text-sm text-base py-3 px-4 focus:outline-none'
@@ -69,13 +78,13 @@ const NewRequest = () => {
                   type='text'
                   placeholder='Ex: Instalação do Adobe Photoshop'
                   className={inputClassName}
-                  {...register('titulo', {
+                  {...register('title', {
                     required: 'O título é obrigatório'
                   })}
                 />
-                {errors.titulo && (
+                {errors.title && (
                   <p className='text-red-600 text-sm mt-1'>
-                    {errors.titulo.message}
+                    {errors.title.message}
                   </p>
                 )}
               </div>
@@ -87,7 +96,7 @@ const NewRequest = () => {
                   </label>
                   <select
                     className={inputClassName}
-                    {...register('tipo', { required: 'Selecione um tipo' })}
+                    {...register('type', { required: 'Selecione um tipo' })}
                   >
                     <option value='' disabled>
                       Selecione...
@@ -97,9 +106,9 @@ const NewRequest = () => {
                     <option value='software'>Software</option>
                     <option value='treinamento'>Treinamento</option>
                   </select>
-                  {errors.tipo && (
+                  {errors.type && (
                     <p className='text-red-600 text-sm mt-1'>
-                      {errors.tipo.message}
+                      {errors.type.message}
                     </p>
                   )}
                 </div>
@@ -109,20 +118,20 @@ const NewRequest = () => {
                   </label>
                   <select
                     className={inputClassName}
-                    {...register('urgencia', {
+                    {...register('urgency', {
                       required: 'Selecione a urgência'
                     })}
                   >
                     <option value='' disabled>
                       Selecione...
                     </option>
-                    <option value='baixa'>Baixa</option>
-                    <option value='media'>Média</option>
-                    <option value='alta'>Alta</option>
+                    <option value='low'>Baixa</option>
+                    <option value='medium'>Média</option>
+                    <option value='high'>Alta</option>
                   </select>
-                  {errors.urgencia && (
+                  {errors.urgency && (
                     <p className='text-red-600 text-sm mt-1'>
-                      {errors.urgencia.message}
+                      {errors.urgency.message}
                     </p>
                   )}
                 </div>
@@ -136,13 +145,13 @@ const NewRequest = () => {
                   rows={4}
                   placeholder='Descreva em detalhes o motivo da sua solicitação...'
                   className={inputClassName}
-                  {...register('motivo', {
+                  {...register('reason', {
                     required: 'O motivo é obrigatório'
                   })}
                 />
-                {errors.motivo && (
+                {errors.reason && (
                   <p className='text-red-600 text-sm mt-1'>
-                    {errors.motivo.message}
+                    {errors.reason.message}
                   </p>
                 )}
               </div>
@@ -152,7 +161,7 @@ const NewRequest = () => {
                   Anexo (Opcional)
                 </label>
                 <label
-                  htmlFor='anexo'
+                  htmlFor='file'
                   className='relative cursor-pointer bg-white rounded-md font-medium text-blue-600 hover:text-blue-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-blue-500'
                 >
                   <div className='flex items-center justify-center border-2 border-dashed border-gray-300 hover:border-gray-500 transition-colors rounded-lg p-6 text-center'>
@@ -160,14 +169,14 @@ const NewRequest = () => {
                       upload_file
                     </span>
                     <span className='ml-3 text-sm text-gray-600'>
-                      {anexoFileName || 'Clique para fazer upload'}
+                      {attachedFileName || 'Clique para fazer upload'}
                     </span>
                   </div>
                   <input
-                    id='anexo'
+                    id='file'
                     type='file'
                     className='sr-only'
-                    {...register('anexo')}
+                    {...register('file')}
                   />
                 </label>
               </div>
@@ -186,7 +195,7 @@ const NewRequest = () => {
 
           <div className='hidden lg:block'>
             <img
-              src='/src/assets/image-request.png' 
+              src='/src/assets/image-request.png'
               alt='Pessoas colaborando em um projeto'
               className='w-full h-[758px] object-cover rounded-lg'
             />
