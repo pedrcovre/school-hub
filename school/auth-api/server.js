@@ -1,6 +1,9 @@
+// auth-api/server.js
+
 require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
+const path = require('path'); // 1. Importe o módulo 'path' do Node
 const app = express();
 
 const authRoutes = require('./routes/authRoutes');

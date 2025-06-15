@@ -1,0 +1,46 @@
+src/
+├── assets/                     # Imagens, ícones, logos
+│   └── logo.png
+│
+├── components/                 # Componentes reutilizáveis
+│   ├── Navbar.jsx
+│   ├── RequestCard.jsx
+│   ├── ResourceItem.jsx
+│   └── ...
+│
+├── features/                   # Funcionalidades por área do sistema
+│   ├── auth/                   # Login e autenticação
+│   │   ├── LoginPage.jsx
+│   │   └── useAuth.js
+│   │
+│   ├── requests/               # Criar, visualizar requisições
+│   │   ├── CreateRequestPage.jsx
+│   │   ├── StudentRequestView.jsx
+│   │   └── AdminRequestView.jsx
+│   │
+│   ├── resources/              # Recursos para alunos
+│   │   └── StudentResourcesPage.jsx
+│   │
+│   └── dashboard/              # Telas principais
+│       ├── AdminDashboard.jsx
+│       └── StudentDashboard.jsx
+│
+├── layouts/                    # Layouts com navbar, etc.
+│   └── MainLayout.jsx
+│
+├── hooks/                      # Hooks personalizados
+│   └── useFetchRequests.js
+│
+├── services/                   # Funções de acesso a API
+│   ├── authService.js
+│   ├── requestService.js
+│   └── resourceService.js
+│
+├── routes/                     # Rotas centralizadas
+│   └── AppRoutes.jsx
+│
+├── styles/                     # Estilos globais ou themes
+│   └── globals.css
+│
+├── App.jsx                     # Componente raiz
+└── main.jsx                    # Ponto de entrada (ReactDOM)
