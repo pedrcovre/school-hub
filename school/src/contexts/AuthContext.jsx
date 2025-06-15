@@ -6,7 +6,7 @@ import axios from 'axios'
 // process.env.REACT_APP_API_URL é a variável de ambiente que vamos configurar no Render.
 // Se ela não existir (quando você estiver rodando o projeto localmente),
 // ele usará 'http://localhost:5000' como padrão.
-const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000'
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000'
 
 const AuthContext = createContext()
 
