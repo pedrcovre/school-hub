@@ -37,7 +37,6 @@ const NewRequest = () => {
     }
 
     try {
-      // 2. Adicione o cabeçalho (header) de autorização na chamada POST
       await axios.post('http://localhost:5000/api/requests', formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
