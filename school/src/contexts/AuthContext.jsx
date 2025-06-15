@@ -1,5 +1,3 @@
-// src/contexts/AuthContext.js
-
 import { createContext, useState, useContext, useEffect } from 'react'
 import axios from 'axios'
 
@@ -62,15 +60,10 @@ export const AuthProvider = ({ children }) => {
     setUser(null)
   }
 
-  // ==================================================================
-  // NOVO CÓDIGO COMEÇA AQUI: Função para atualizar o perfil
-  // ==================================================================
   const updateUserProfile = async updates => {
-    // Usaremos FormData para enviar arquivos (imagem) e texto (senha) juntos
     const formData = new FormData()
 
     if (updates.profileImage) {
-      // O nome 'profileImage' deve ser o mesmo que sua API espera receber
       formData.append('profileImage', updates.profileImage)
     }
     if (updates.newPassword) {
@@ -79,39 +72,28 @@ export const AuthProvider = ({ children }) => {
     }
 
     try {
-      // Fazemos a chamada para a API. A URL do endpoint pode variar.
-      // Geralmente é algo como /api/users/profile ou /api/users/me
       const response = await axios.patch(
         'http://localhost:5000/api/users/profile',
         formData,
         {
           headers: {
-            // Passamos o token de autorização para a API saber quem somos
             Authorization: `Bearer ${token}`,
-            // Com FormData, o axios define o 'Content-Type' como 'multipart/form-data' automaticamente
             'Content-Type': 'multipart/form-data'
           }
         }
       )
 
-      const updatedUserData = response.data.user // Supondo que a API retorne o usuário atualizado
-
-      // Atualizamos o estado local e o localStorage com os novos dados
+      const updatedUserData = response.data.user
       localStorage.setItem('user', JSON.stringify(updatedUserData))
       setUser(updatedUserData)
 
-      // Retornamos os dados atualizados caso o componente queira usá-los
       return updatedUserData
     } catch (error) {
-      // Lançamos o erro para que a página de perfil possa exibi-lo
       throw new Error(
         error.response?.data?.message || 'Erro ao atualizar o perfil'
       )
     }
   }
-  // ==================================================================
-  // NOVO CÓDIGO TERMINA AQUI
-  // ==================================================================
 
   const value = {
     user,
@@ -119,7 +101,7 @@ export const AuthProvider = ({ children }) => {
     login,
     logout,
     registerUser,
-    updateUserProfile, // <--- Adicionamos a nova função aqui
+    updateUserProfile,
     isAuthenticated: !!token,
     role: user?.role || null
   }
