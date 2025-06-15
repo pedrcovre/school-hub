@@ -20,7 +20,7 @@ const Navbar = () => {
   const location = useLocation()
   const [isDropdownOpen, setIsDropdownOpen] = useState(false)
 
-  const API_URL = 'http://localhost:5000'
+  const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000'
 
   const showSearchBar =
     location.pathname === '/' || location.pathname.includes('/resource')
@@ -50,8 +50,8 @@ const Navbar = () => {
   const sitemap = user.role === 'admin' ? adminSitemap : studentSitemap
 
   const finalAvatarSrc = user.avatarUrl
-    ? `${API_URL}${user.avatarUrl}` 
-    : user.role === 'admin' 
+    ? `${API_URL}${user.avatarUrl}`
+    : user.role === 'admin'
     ? '/src/assets/icon-avatar-aluno.png'
     : '/src/assets/icon-avatar-aluno.png'
 

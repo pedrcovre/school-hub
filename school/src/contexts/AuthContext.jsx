@@ -1,6 +1,13 @@
 import { createContext, useState, useContext, useEffect } from 'react'
 import axios from 'axios'
 
+// --- MUDANÇA 1: Definir a URL da API dinamicamente ---
+// Aqui criamos uma variável que vai guardar a URL base da sua API.
+// process.env.REACT_APP_API_URL é a variável de ambiente que vamos configurar no Render.
+// Se ela não existir (quando você estiver rodando o projeto localmente),
+// ele usará 'http://localhost:5000' como padrão.
+const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000'
+
 const AuthContext = createContext()
 
 export const AuthProvider = ({ children }) => {
@@ -18,8 +25,10 @@ export const AuthProvider = ({ children }) => {
 
   const login = async (email, password) => {
     try {
+      // --- MUDANÇA 2: Usar a variável API_URL ---
+      // Trocamos a URL fixa pela nossa nova variável.
       const response = await axios.post(
-        'http://localhost:5000/api/auth/login',
+        `${API_URL}/api/auth/login`, // Note o uso de `${API_URL}`
         {
           email,
           password
@@ -37,8 +46,9 @@ export const AuthProvider = ({ children }) => {
 
   const registerUser = async (name, email, password) => {
     try {
+      // --- MUDANÇA 3: Usar a variável API_URL ---
       const response = await axios.post(
-        'http://localhost:5000/api/auth/register',
+        `${API_URL}/api/auth/register`, // Usando a variável aqui também
         {
           name,
           email,
@@ -72,8 +82,9 @@ export const AuthProvider = ({ children }) => {
     }
 
     try {
+      // --- MUDANÇA 4: Usar a variável API_URL ---
       const response = await axios.patch(
-        'http://localhost:5000/api/users/profile',
+        `${API_URL}/api/users/profile`, // E aqui também
         formData,
         {
           headers: {

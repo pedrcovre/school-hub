@@ -4,6 +4,8 @@ import { useAuth } from '../contexts/AuthContext'
 import { useSearch } from '../contexts/SearchContext'
 import axios from 'axios'
 
+const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000'
+
 const StatusBadge = ({ status }) => {
   let colorClass = ''
   let label = ''
@@ -53,7 +55,7 @@ const Request = () => {
       }
 
       try {
-        const response = await axios.get('http://localhost:5000/api/requests', {
+        const response = await axios.get(`${API_URL}/api/requests`, {
           headers: {
             Authorization: `Bearer ${token}`
           }
