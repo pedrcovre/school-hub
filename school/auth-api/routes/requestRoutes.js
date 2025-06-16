@@ -1,28 +1,27 @@
-// routes/requestRoutes.js
 const express = require('express')
 const router = express.Router()
-const requestController = require('../controllers/requestController')
-const multer = require('multer')
+const {
+  getAllRequests,
+  createRequest,
+  deleteRequest,
+  getRequestById,
+  updateRequest,
+  updateRequestStatus
+} = require('../controllers/requestController')
 const authMiddleware = require('../middleware/authMiddleware')
+const adminMiddleware = require('../middleware/adminMiddleware')
+const upload = require('../config/multer')
 
-const upload = multer({ dest: 'uploads/' })
-
-router.get('/', authMiddleware, requestController.getAllRequests)
-router.get('/:id', authMiddleware, requestController.getRequestById);
-
-router.post(
-  '/',
+router.get('/', authMiddleware, getAllRequests)
+router.get('/:id', authMiddleware, getRequestById)
+router.post('/', authMiddleware, upload.single('file'), createRequest)
+router.put('/:id', authMiddleware, upload.single('file'), updateRequest)
+router.delete('/:id', authMiddleware, deleteRequest)
+router.patch(
+  '/:id/status',
   authMiddleware,
-  upload.single('file'),
-  requestController.createRequest
+  adminMiddleware,
+  updateRequestStatus
 )
-router.put(
-  '/:id',
-  authMiddleware,
-  upload.single('file'),
-  requestController.updateRequest // Você vai criar essa função
-)
-
-router.delete('/:id', authMiddleware, requestController.deleteRequest)
 
 module.exports = router
