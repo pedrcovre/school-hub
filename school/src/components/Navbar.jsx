@@ -6,7 +6,7 @@ import { useSearch } from '../contexts/SearchContext'
 const adminSitemap = [
   { label: 'Requisições', href: '/' },
   { label: 'Recursos', href: '/resource' },
-  { label: 'Dashboard', href: '#' }
+  { label: 'Dashboard', href: '/dashboard' }
 ]
 
 const studentSitemap = [

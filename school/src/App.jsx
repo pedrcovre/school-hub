@@ -13,7 +13,8 @@ import {
   ProfilePage,
   ForgotPassword,
   ResetPassword,
-  NewResource // ✅ nova importação
+  NewResource,
+  Dashboard
 } from './components'
 
 const AppRoutes = () => {
@@ -48,6 +49,14 @@ const AppRoutes = () => {
         <Route path='newrequest' element={<NewRequest />} />
         <Route path='newresource' element={<NewResource />} /> {/* ✅ nova rota */}
         <Route path='profile' element={<ProfilePage />} />
+        <Route
+          path='dashboard'
+          element={
+            <ProtectedRoute>
+              <Dashboard />
+            </ProtectedRoute>
+          }
+        />
       </Route>
 
       <Route path='*' element={<Navigate to={user ? '/' : '/login'} />} />
