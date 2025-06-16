@@ -3,8 +3,8 @@
 import { useForm } from 'react-hook-form'
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
-import { useAuth } from '../contexts/AuthContext' // Verifique o caminho
-import EmailInput from '../components/EmailInput' // Reutilize seu componente de e-mail
+import { useAuth } from '../contexts/AuthContext' 
+import EmailInput from '../components/EmailInput' 
 
 const ForgotPassword = () => {
   const {
@@ -12,7 +12,7 @@ const ForgotPassword = () => {
     handleSubmit,
     formState: { errors }
   } = useForm()
-  const { sendPasswordResetEmail } = useAuth() // Precisaremos criar esta função no AuthContext
+  const { sendPasswordResetEmail } = useAuth() 
   const [isLoading, setIsLoading] = useState(false)
   const [message, setMessage] = useState('')
 
@@ -20,14 +20,11 @@ const ForgotPassword = () => {
     setIsLoading(true)
     setMessage('')
     try {
-      // Esta função no backend irá gerar o token e enviar o e-mail
       await sendPasswordResetEmail(data.email)
       setMessage(
         'Se um usuário com este e-mail existir, um link para redefinição de senha foi enviado.'
       )
     } catch (error) {
-      // Para segurança, geralmente não informamos se o e-mail não existe.
-      // A mensagem de sucesso é exibida de qualquer forma.
       setMessage(
         'Se um usuário com este e-mail existir, um link para redefinição de senha foi enviado.'
       )
@@ -91,7 +88,7 @@ const ForgotPassword = () => {
 
       <div className='hidden lg:block mr-2 w-1/2 h-screen'>
         <img
-          src='/src/assets/image-login.jpg' // Pode usar a mesma imagem ou uma diferente
+          src='/src/assets/image-login.jpg' 
           alt='Foto Pessoas'
           className='w-full h-[860px] object-cover rounded-lg'
         />

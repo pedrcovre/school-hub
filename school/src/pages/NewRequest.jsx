@@ -197,7 +197,7 @@ const NewRequest = () => {
                 </label>
                 <label
                   htmlFor='file'
-                  className='relative cursor-pointer bg-white rounded-md font-medium text-blue-600 hover:text-blue-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-blue-500'
+                  className='relative cursor-pointer bg-white rounded-md font-medium text-blue-400 hover:text-blue-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-blue-500'
                 >
                   <div className='flex items-center justify-center border-2 border-dashed border-gray-300 hover:border-gray-500 transition-colors rounded-lg p-6 text-center'>
                     <span className='material-symbols-rounded text-gray-700'>
@@ -220,7 +220,7 @@ const NewRequest = () => {
                 <button
                   type='submit'
                   disabled={isSubmitting}
-                  className='w-full flex justify-center py-3 px-4 border border-transparent rounded-lg shadow-sm text-base font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:bg-gray-400 disabled:cursor-not-allowed'
+                  className='w-full cursor-pointer flex justify-center py-3 px-4 border border-transparent rounded-lg shadow-sm text-base font-medium text-white bg-blue-400 hover:bg-blue-500 transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:bg-gray-400 disabled:cursor-not-allowed'
                 >
                   {isSubmitting
                     ? (requestData ? 'Salvando...' : 'Enviando...')

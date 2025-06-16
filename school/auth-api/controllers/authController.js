@@ -95,11 +95,13 @@ exports.forgotPassword = async (req, res) => {
       .request()
       .input('email', sql.NVarChar, email)
       .query('SELECT * FROM Users WHERE Email = @email')
+
     if (userResult.recordset.length === 0) {
       return res
         .status(200)
         .json({ message: 'Se o e-mail estiver correto, um link foi enviado.' })
     }
+
     const user = userResult.recordset[0]
     const resetToken = crypto.randomBytes(32).toString('hex')
     const hashedToken = crypto
@@ -107,6 +109,7 @@ exports.forgotPassword = async (req, res) => {
       .update(resetToken)
       .digest('hex')
     const expirationDate = new Date(Date.now() + 10 * 60 * 1000)
+
     await pool
       .request()
       .input('token', sql.NVarChar, hashedToken)
@@ -115,13 +118,16 @@ exports.forgotPassword = async (req, res) => {
       .query(
         'UPDATE Users SET PasswordResetToken = @token, PasswordResetExpires = @expires WHERE Id = @userId'
       )
+
     const resetURL = `${process.env.FRONTEND_URL}/reset-password/${resetToken}`
     const message = `<h1>Redefinição de Senha</h1><p>Clique <a href="${resetURL}" target="_blank">aqui</a> para redefinir sua senha. Este link é válido por 10 minutos.</p>`
+
     await sendEmail({
       to: user.Email,
       subject: 'Redefinição de Senha',
       html: message
     })
+
     res.status(200).json({ message: 'E-mail de redefinição enviado.' })
   } catch (error) {
     console.error('Erro em forgotPassword:', error)
@@ -146,12 +152,15 @@ exports.resetPassword = async (req, res) => {
       .query(
         'SELECT Id FROM Users WHERE PasswordResetToken = @token AND PasswordResetExpires > GETDATE()'
       )
+
     if (userResult.recordset.length === 0) {
       return res.status(400).json({ message: 'Token inválido ou expirado.' })
     }
+
     const user = userResult.recordset[0]
     const salt = await bcrypt.genSalt(10)
     const hashedPassword = await bcrypt.hash(password, salt)
+
     await pool
       .request()
       .input('password', sql.NVarChar, hashedPassword)
@@ -159,6 +168,7 @@ exports.resetPassword = async (req, res) => {
       .query(
         'UPDATE Users SET Password = @password, PasswordResetToken = NULL, PasswordResetExpires = NULL WHERE Id = @userId'
       )
+
     res
       .status(200)
       .json({ status: 'success', message: 'Senha alterada com sucesso.' })

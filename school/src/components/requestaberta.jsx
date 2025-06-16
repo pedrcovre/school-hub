@@ -19,11 +19,7 @@ const getStatusBadge = (status) => {
 
 const Requestaberta = ({ data, onClose, onEdit, onDelete }) => {
   const { token, role } = useAuth();
-  const navigate = useNavigate();
 
-    const handleEdit = () => {
-    navigate("/newrequest", { state: { requestData: data } });
-  };
   if (!data) return null;
 
   const handleDelete = async () => {
@@ -95,13 +91,10 @@ const Requestaberta = ({ data, onClose, onEdit, onDelete }) => {
         <div className="flex justify-around items-center mt-20">
           {role === 'student' && (
             <>
-        <button
-          className="flex items-center gap-2 px-6 py-3 rounded-xl bg-[#d0d9e3] hover:bg-black hover:text-white cursor-pointer"
-          onClick={handleEdit}
-        >
-          <span className="material-symbols-outlined">edit</span>
-          <p className="text-xl font-bold">EDITAR</p>
-        </button>
+              <button className="flex items-center gap-2 px-6 py-3 rounded-xl bg-[#d0d9e3] hover:bg-black hover:text-white cursor-pointer">
+                <span className="material-symbols-outlined">edit</span>
+                <p className="text-xl font-bold">EDITAR</p>
+              </button>
 
               <button
                 onClick={handleDelete}
