@@ -1,13 +1,13 @@
-require('dotenv').config();
-const express = require('express');
-const cors = require('cors');
-const app = express();
+
+require('dotenv').config()
+const express = require('express')
+const cors = require('cors')
 const path = require('path')
-const authRoutes = require('./routes/authRoutes');
-const requestRoutes = require('./routes/requestRoutes');
+const app = express()
 const authRoutes = require('./routes/authRoutes')
 const requestRoutes = require('./routes/requestRoutes')
 const changePasswordRoutes = require('./routes/ChangePasswordRoutes')
+const userRoutes = require('./routes/userRoutes')
 
 // Middleware CORS com origem do frontend
 app.use(cors({
@@ -23,10 +23,11 @@ app.use((req, res, next) => {
   next();
 });
 
-// Rotas
-app.use('/api/auth', authRoutes);
-app.use('/api/requests', requestRoutes);
-app.use('/api/change-password', changePasswordRoutes);
+app.use('/api/auth', authRoutes)
+app.use('/api/requests', requestRoutes)
+app.use('/api/change-password', changePasswordRoutes)
+app.use('/api/users', userRoutes)
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')))
 
 // Arquivos estáticos (uploads)
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));

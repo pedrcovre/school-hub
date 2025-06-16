@@ -1,4 +1,3 @@
-
 const { poolPromise, sql } = require('../db')
 const bcrypt = require('bcryptjs')
 
