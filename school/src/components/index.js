@@ -1,29 +1,29 @@
-import Navbar from "./Navbar";
-import RequestCard from "./RequestCard";
-import NewRequest from "../pages/NewRequest";
-import Register from "../pages/Register";
-import Resource from "../pages/resource";
-import Request from "../pages/Request";
-import Login from "../pages/Login";
-import ChangePassword from "../pages/ChangePassword";
-import Layout from "./Layout";
-import ProtectedRoute from "./ProtectedRoute";
-import ProfilePage from "../pages/ProfilePage";
-import ForgotPassword from "../pages/ForgotPassword";
-import ResetPassword from "../pages/ResetPassword";
+import Navbar from './Navbar'
+import NewRequest from '../pages/NewRequest'
+import Register from '../pages/Register'
+import Login from '../pages/Login'
+import ProfilePage from '../pages/ProfilePage'
+import Resource from '../pages/Resource'
+import Request from '../pages/Request'
+import ProtectedRoute from './ProtectedRoute'
+import ForgotPassword from '../pages/ForgotPassword'
+import ResetPassword from '../pages/ResetPassword'
+import Requestaberta from './RequestModal'
+import Dashboard from '../pages/Dashboard'
+import Layout from './Layout'
 
 export {
-    Navbar,
-    RequestCard,
-    NewRequest,
-    Register,
-    Login,
-    Request,
-    Resource,
-    ChangePassword,
-    Layout,
-    ProtectedRoute,
-    ProfilePage,
-    ForgotPassword,
-    ResetPassword
+  Navbar,
+  NewRequest,
+  Register,
+  Login,
+  ProfilePage,
+  Resource,
+  Request,
+  ProtectedRoute,
+  ForgotPassword,
+  ResetPassword,
+  Requestaberta,
+  Dashboard,
+  Layout
 }
