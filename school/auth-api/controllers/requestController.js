@@ -16,12 +16,34 @@ const getAllRequests = async (req, res) => {
       FROM requests r
       LEFT JOIN users u ON r.approved_by = u.id
     `
+
     const request = pool.request()
 
     if (role === 'admin') {
-      query += ' ORDER BY r.created_at DESC'
+      query = `
+        SELECT 
+          r.id, 
+          r.type AS tipo, 
+          FORMAT(r.created_at, 'yyyy-MM-dd') AS data,
+          r.status,
+          ISNULL(student.Name, 'Aluno não encontrado') AS responsavel
+        FROM requests r
+        LEFT JOIN Users student ON r.student_id = student.Id
+        ORDER BY r.created_at DESC
+      `
     } else {
-      query += ' WHERE r.student_id = @userId ORDER BY r.created_at DESC'
+      query = `
+        SELECT 
+          r.id, 
+          r.type AS tipo, 
+          FORMAT(r.created_at, 'yyyy-MM-dd') AS data,
+          r.status,
+          ISNULL(admin.Name, 'Não definido') AS responsavel
+        FROM requests r
+        LEFT JOIN Users admin ON r.decided_by = admin.Id
+        WHERE r.student_id = @userId
+        ORDER BY r.created_at DESC
+      `
       request.input('userId', sql.Int, userId)
     }
 

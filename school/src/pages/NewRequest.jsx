@@ -3,7 +3,7 @@ import axios from 'axios'
 import { useAuth } from '../contexts/AuthContext'
 
 const NewRequest = () => {
-  const { user, token } = useAuth() // 1. Pegue o token do contexto de autenticação
+  const { user, token } = useAuth() 
 
   const {
     register,

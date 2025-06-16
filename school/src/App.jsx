@@ -11,7 +11,8 @@ import {
   Layout,
   ProtectedRoute,
   NewRequest,
-  ChangePassword
+  ChangePassword,
+  ProfilePage
 } from './components'
 
 const AppRoutes = () => {
@@ -26,7 +27,7 @@ const AppRoutes = () => {
       />
       <Route
         path='/change-password'
-        element={user ? <Navigate to='/' /> : <ChangePassword />} 
+        element={user ? <Navigate to='/' /> : <ChangePassword />}
       />
 
       <Route
@@ -40,6 +41,8 @@ const AppRoutes = () => {
         <Route index element={<Request />} />
         <Route path='resource' element={<Resource />} />
         <Route path='newrequest' element={<NewRequest />} />
+
+        <Route path='profile' element={<ProfilePage />} />
       </Route>
 
       <Route path='*' element={<Navigate to={user ? '/' : '/login'} />} />

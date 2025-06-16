@@ -20,6 +20,8 @@ const Navbar = () => {
   const location = useLocation()
   const [isDropdownOpen, setIsDropdownOpen] = useState(false)
 
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/'
+
   const showSearchBar =
     location.pathname === '/' || location.pathname.includes('/resource')
 
@@ -31,11 +33,9 @@ const Navbar = () => {
         setIsDropdownOpen(false)
       }
     }
-
     if (isDropdownOpen) {
       document.addEventListener('mousedown', handleClickOutside)
     }
-
     return () => {
       document.removeEventListener('mousedown', handleClickOutside)
     }
@@ -48,10 +48,13 @@ const Navbar = () => {
   }
 
   const sitemap = user.role === 'admin' ? adminSitemap : studentSitemap
-  const avatar =
-    user.role === 'admin'
-      ? '/src/assets/icon-avatar-admin.png'
-      : '/src/assets/icon-avatar-aluno.png'
+
+  const finalAvatarSrc = user.avatarUrl
+    ? `${API_URL}${user.avatarUrl}`
+    : user.role === 'admin'
+    ? '/src/assets/icon-avatar-aluno.png'
+    : '/src/assets/icon-avatar-aluno.png'
+
   const icon =
     user.role === 'admin' ? '/src/assets/logo-admin.png' : '/logo.svg'
 
@@ -75,7 +78,6 @@ const Navbar = () => {
             ))}
           </ul>
         </div>
-
         <div className='flex items-center gap-6'>
           {showSearchBar && (
             <div className='relative'>
@@ -90,8 +92,7 @@ const Navbar = () => {
                 className='pl-10 pr-4 py-2 h-[50px] w-64 bg-[#395F8B1A] rounded-lg active:outline-none focus:outline-none transition'
               />
             </div>
-          )} 
-
+          )}
           <button
             type='button'
             className='flex items-center justify-center bg-[#395F8B1A] rounded-lg px-3 w-[50px] h-[50px]'
@@ -100,19 +101,17 @@ const Navbar = () => {
               notifications
             </span>
           </button>
-
           <div className='relative' ref={dropdownRef}>
             <button
               type='button'
               onClick={() => setIsDropdownOpen(!isDropdownOpen)}
             >
               <img
-                src={avatar}
-                className='w-[50px] rounded-full cursor-pointer'
+                src={finalAvatarSrc}
+                className='w-[50px] h-[50px] rounded-full cursor-pointer object-cover'
                 alt='Avatar'
               />
             </button>
-
             {isDropdownOpen && (
               <div className='absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-50'>
                 <div className='px-4 py-2 text-sm text-gray-700'>
@@ -122,12 +121,13 @@ const Navbar = () => {
                   </p>
                 </div>
                 <div className='border-t border-gray-100'></div>
-                <a
-                  href='#'
+                <Link
+                  to='/profile'
                   className='block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 cursor-pointer'
+                  onClick={() => setIsDropdownOpen(false)}
                 >
                   Meu Perfil
-                </a>
+                </Link>
                 <button
                   onClick={handleLogout}
                   className='block w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-gray-100 cursor-pointer'

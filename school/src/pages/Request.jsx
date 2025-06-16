@@ -5,6 +5,8 @@ import { useSearch } from '../contexts/SearchContext'
 import axios from 'axios'
 import Requestaberta from '../components/Requestaberta'
 
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000'
+
 const StatusBadge = ({ status }) => {
   let colorClass = ''
   let label = ''
@@ -50,7 +52,7 @@ const Request = () => {
     const fetchData = async () => {
       if (!token) return
       try {
-        const response = await axios.get('http://localhost:5000/api/requests', {
+        const response = await axios.get(`${API_URL}/api/requests`, {
           headers: {
             Authorization: `Bearer ${token}`
           }
