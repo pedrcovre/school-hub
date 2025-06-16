@@ -6,7 +6,8 @@ const {
   deleteRequest,
   getRequestById,
   updateRequest,
-  updateRequestStatus
+  updateRequestStatus,
+  addOrUpdateObservation
 } = require('../controllers/requestController')
 const authMiddleware = require('../middleware/authMiddleware')
 const adminMiddleware = require('../middleware/adminMiddleware')
@@ -22,6 +23,12 @@ router.patch(
   authMiddleware,
   adminMiddleware,
   updateRequestStatus
+)
+router.patch(
+  '/:id/observation',
+  authMiddleware,
+  adminMiddleware,
+  addOrUpdateObservation
 )
 
 module.exports = router

@@ -16,6 +16,7 @@ const getAllRequests = async (req, res) => {
           FORMAT(r.created_at, 'yyyy-MM-dd') AS data,
           r.status,
           r.title,
+          r.admin_observation,
           ISNULL(student.Name, 'Aluno não encontrado') AS responsavel
         FROM requests r
         LEFT JOIN Users student ON r.student_id = student.Id
@@ -29,6 +30,7 @@ const getAllRequests = async (req, res) => {
           FORMAT(r.created_at, 'yyyy-MM-dd') AS data,
           r.status,
           r.title,
+          r.admin_observation,
           ISNULL(admin.Name, 'Pendente') AS responsavel
         FROM requests r
         LEFT JOIN Users admin ON r.decided_by = admin.Id
@@ -61,6 +63,7 @@ const getRequestById = async (req, res) => {
           FORMAT(r.created_at, 'yyyy-MM-dd') AS data,
           r.status,
           r.reason,
+          r.admin_observation,
           ISNULL(u.Name, 'Não definido') AS responsavel,
           r.file_path AS arquivo
         FROM requests r
@@ -206,11 +209,42 @@ const updateRequestStatus = async (req, res) => {
   }
 }
 
+const addOrUpdateObservation = async (req, res) => {
+  const requestId = req.params.id
+  const { observation } = req.body
+
+  if (typeof observation === 'undefined') {
+    return res.status(400).json({ error: 'O campo observação é obrigatório.' })
+  }
+
+  try {
+    const pool = await poolPromise
+    const result = await pool
+      .request()
+      .input('id', sql.Int, requestId)
+      .input('observation', sql.NVarChar(sql.MAX), observation).query(`
+                UPDATE requests
+                SET admin_observation = @observation
+                WHERE id = @id;
+            `)
+
+    if (result.rowsAffected[0] === 0) {
+      return res.status(404).json({ error: 'Requisição não encontrada.' })
+    }
+
+    res.status(200).json({ message: 'Observação salva com sucesso!' })
+  } catch (error) {
+    console.error('ERRO DETALHADO AO SALVAR OBSERVAÇÃO:', error)
+    res.status(500).json({ error: 'Erro interno ao salvar a observação.' })
+  }
+}
+
 module.exports = {
   getAllRequests,
   createRequest,
   deleteRequest,
   getRequestById,
   updateRequest,
-  updateRequestStatus
+  updateRequestStatus,
+  addOrUpdateObservation
 }
