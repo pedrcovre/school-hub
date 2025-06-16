@@ -11,6 +11,8 @@ import ProtectedRoute from "./ProtectedRoute";
 import ProfilePage from "../pages/ProfilePage";
 import ForgotPassword from "../pages/ForgotPassword";
 import ResetPassword from "../pages/ResetPassword";
+export { default as NewResource } from '../pages/Newresource'
+
 
 export {
     Navbar,

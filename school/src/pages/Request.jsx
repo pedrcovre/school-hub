@@ -148,19 +148,26 @@ const Request = () => {
     <div className='min-h-screen relative'>
       {/* Tela de Loading */}
       {isLoadingDetails && (
-        <div className='fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-[100]'>
-          <p className='text-white text-xl font-semibold'>
+        <div className='fixed inset-0 bg-white/10 flex items-center justify-center z-[100]'>
+          <p className='text-black text-3xl font-semibold'>
             Carregando detalhes...
           </p>
         </div>
       )}
 
       <div className='max-w-7xl mx-auto p-4 sm:p-6 lg:p-8'>
-        {/* Header */}
         <div className='flex flex-col sm:flex-row justify-between items-center mb-8'>
-          <h1 className='text-3xl lg:text-4xl font-bold text-black mb-4 sm:mb-0'>
-            Minhas Requisições
-          </h1>
+          {role !== 'admin' && (
+            <h1 className='text-3xl lg:text-4xl font-bold text-black mb-4 sm:mb-0'>
+              Minhas Requisições
+            </h1>
+          )}
+          {role !== 'student' && (
+            <h1 className='text-3xl lg:text-4xl font-bold text-black mb-4 sm:mb-0'>
+              Requisições
+            </h1>
+          )}
+
           {role !== 'admin' && (
             <button
               className='bg-blue-400 text-white font-semibold px-6 py-3 rounded-lg shadow-sm hover:bg-blue-600 transition-colors'
@@ -200,7 +207,7 @@ const Request = () => {
                     ID
                   </th>
                   <th className='px-6 py-4 text-left text-xs font-bold text-black uppercase tracking-wider'>
-                    Tipo de Recurso
+                    Tipo de Requisição
                   </th>
                   <th className='px-6 py-4 text-left text-xs font-bold text-black uppercase tracking-wider'>
                     Data

@@ -5,7 +5,8 @@ const path = require('path')
 const authRoutes = require('./routes/authRoutes')
 const requestRoutes = require('./routes/requestRoutes')
 const userRoutes = require('./routes/userRoutes')
-
+const resourcesRoutes = require('./routes/resourcesRoutes')
+app.use('/api/requests/resources', resourcesRoutes)
 const app = express()
 
 const corsOptions = {
@@ -21,10 +22,11 @@ app.use((req, res, next) => {
   console.log(`${new Date().toISOString()} - ${req.method} ${req.url}`)
   next()
 })
-
+app.use('/api/requests/resources', resourceRoutes)
 app.use('/api/auth', authRoutes)
 app.use('/api/requests', requestRoutes)
 app.use('/api/users', userRoutes)
+app.use('/api/requests/resources', resourcesRoutes)
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')))
 
 const PORT = process.env.PORT || 5000

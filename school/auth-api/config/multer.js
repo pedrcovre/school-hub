@@ -18,7 +18,7 @@ const storage = multer.diskStorage({
   },
   filename: (req, file, cb) => {
     // Garante um nome de arquivo único para evitar sobreposição
-    // Ex: anexo-1718515570189.pdf
+    // Ex: resourceFile-1718515570189.pdf
     const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1e9)
     cb(
       null,
@@ -27,8 +27,29 @@ const storage = multer.diskStorage({
   }
 })
 
-// Cria a instância do multer com a configuração de armazenamento
-const upload = multer({ storage: storage })
+// Limitar o tamanho do arquivo (exemplo: 10MB)
+const limits = {
+  fileSize: 10 * 1024 * 1024 // 10 MB
+}
+
+// Filtro para aceitar só certos tipos (exemplo: pdf, docx, imagens)
+const fileFilter = (req, file, cb) => {
+  const allowedTypes = [
+    'application/pdf',
+    'application/msword',
+    'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+    'image/jpeg',
+    'image/png'
+  ]
+  if (allowedTypes.includes(file.mimetype)) {
+    cb(null, true)
+  } else {
+    cb(new Error('Tipo de arquivo não suportado'), false)
+  }
+}
+
+// Cria a instância do multer com a configuração de armazenamento, filtro e limite
+const upload = multer({ storage, limits, fileFilter })
 
 // Exporta a instância para que possa ser usada nas rotas
 module.exports = upload

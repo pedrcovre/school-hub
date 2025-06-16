@@ -12,7 +12,8 @@ import {
   NewRequest,
   ProfilePage,
   ForgotPassword,
-  ResetPassword
+  ResetPassword,
+  NewResource // ✅ nova importação
 } from './components'
 
 const AppRoutes = () => {
@@ -25,7 +26,6 @@ const AppRoutes = () => {
         path='/register'
         element={user ? <Navigate to='/' /> : <Register />}
       />
-
       <Route
         path='/forgot-password'
         element={user ? <Navigate to='/' /> : <ForgotPassword />}
@@ -46,6 +46,7 @@ const AppRoutes = () => {
         <Route index element={<Request />} />
         <Route path='resource' element={<Resource />} />
         <Route path='newrequest' element={<NewRequest />} />
+        <Route path='newresource' element={<NewResource />} /> {/* ✅ nova rota */}
         <Route path='profile' element={<ProfilePage />} />
       </Route>
 
@@ -67,3 +68,4 @@ const App = () => {
 }
 
 export default App
+  
