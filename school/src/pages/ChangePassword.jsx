@@ -1,5 +1,5 @@
 import { useForm } from 'react-hook-form';
-import { useAuth } from '../contexts/AuthContext'; // ajuste o caminho
+import { useAuth } from '../contexts/AuthContext'; 
 import EmailInput from '../components/EmailInput';
 import PasswordInput from '../components/PasswordInput';
 

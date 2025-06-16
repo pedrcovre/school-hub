@@ -23,7 +23,6 @@ router.put(
   requestController.updateRequest // Você vai criar essa função
 )
 
-// NOVA ROTA DELETE
 router.delete('/:id', authMiddleware, requestController.deleteRequest)
 
 module.exports = router
