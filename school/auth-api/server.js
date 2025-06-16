@@ -31,7 +31,7 @@ app.use('/uploads', express.static(path.join(__dirname, 'uploads')))
 
 // Arquivos estáticos (uploads)
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
-
+  
 // Inicializa servidor
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {

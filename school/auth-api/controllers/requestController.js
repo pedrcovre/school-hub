@@ -56,7 +56,77 @@ const getAllRequests = async (req, res) => {
   }
 }
 
+const getRequestById = async (req, res) => {
+  const requestId = req.params.id;
+  try {
+    const pool = await poolPromise;
+    const result = await pool
+      .request()
+      .input('id', sql.Int, requestId)
+      .query(`
+        SELECT 
+          r.id, 
+          r.type AS tipo, 
+          r.title,
+          r.urgency,
+          FORMAT(r.created_at, 'yyyy-MM-dd') AS data,
+          r.status,
+          r.reason,
+          ISNULL(u.name, 'Não definido') AS responsavel,
+          r.file_path AS arquivo
+        FROM requests r
+        LEFT JOIN users u ON r.approved_by = u.id
+        WHERE r.id = @id
+      `);
 
+    if (result.recordset.length === 0) {
+      return res.status(404).json({ error: 'Requisição não encontrada' });
+    }
+
+    res.json(result.recordset[0]);
+  } catch (error) {
+    console.error('Erro ao buscar requisição por ID:', error);
+    res.status(500).json({ error: 'Erro ao buscar requisição' });
+  }
+};
+
+
+const updateRequest = async (req, res) => {
+  const requestId = req.params.id;
+  const { title, type, urgency, reason } = req.body;
+  const file_path = req.file ? req.file.path : null;
+
+  try {
+    const pool = await poolPromise;
+    let query = `
+      UPDATE requests
+      SET title = @title,
+          type = @type,
+          urgency = @urgency,
+          reason = @reason
+          ${file_path ? ', file_path = @file_path' : ''}
+      WHERE id = @id
+    `;
+
+    const request = pool.request()
+      .input('id', sql.Int, requestId)
+      .input('title', sql.VarChar(100), title)
+      .input('type', sql.VarChar(50), type)
+      .input('urgency', sql.VarChar(20), urgency)
+      .input('reason', sql.Text, reason);
+
+    if (file_path) {
+      request.input('file_path', sql.VarChar(255), file_path);
+    }
+
+    await request.query(query);
+
+    res.status(200).json({ message: 'Requisição atualizada com sucesso!' });
+  } catch (err) {
+    console.error('Erro ao atualizar requisição:', err);
+    res.status(500).json({ error: 'Erro ao atualizar a requisição' });
+  }
+};
 const createRequest = async (req, res) => {
   const { student_id, type, title, urgency, reason } = req.body
   const file_path = req.file ? req.file.path : null
@@ -109,5 +179,7 @@ const deleteRequest = async (req, res) => {
 module.exports = {
   getAllRequests,
   createRequest,
-  deleteRequest
+  deleteRequest,
+  getRequestById,
+  updateRequest
 }

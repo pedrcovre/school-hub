@@ -8,12 +8,19 @@ const authMiddleware = require('../middleware/authMiddleware')
 const upload = multer({ dest: 'uploads/' })
 
 router.get('/', authMiddleware, requestController.getAllRequests)
+router.get('/:id', authMiddleware, requestController.getRequestById);
 
 router.post(
   '/',
   authMiddleware,
   upload.single('file'),
   requestController.createRequest
+)
+router.put(
+  '/:id',
+  authMiddleware,
+  upload.single('file'),
+  requestController.updateRequest // Você vai criar essa função
 )
 
 // NOVA ROTA DELETE

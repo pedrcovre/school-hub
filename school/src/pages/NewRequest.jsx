@@ -1,14 +1,20 @@
 import { useForm } from 'react-hook-form'
 import axios from 'axios'
 import { useAuth } from '../contexts/AuthContext'
+import { useLocation, useNavigate } from 'react-router-dom'
+import { useEffect } from 'react'
 
 const NewRequest = () => {
-  const { user, token } = useAuth() 
+  const { user, token } = useAuth()
+  const location = useLocation()
+  const navigate = useNavigate()
+  const requestData = location.state?.requestData
 
   const {
     register,
     handleSubmit,
     watch,
+    reset,
     formState: { errors, isSubmitting }
   } = useForm({
     defaultValues: {
@@ -20,12 +26,24 @@ const NewRequest = () => {
     }
   })
 
+  // Preenche o formulário se estiver editando
+  useEffect(() => {
+    if (requestData) {
+      reset({
+        title: requestData.title || requestData.titulo || '',
+        type: requestData.type || requestData.tipo || '',
+        reason: requestData.reason || requestData.descricao || '',
+        urgency: requestData.urgency || requestData.urgencia || '',
+        file: null
+      })
+    }
+  }, [requestData, reset])
+
   const attachedFile = watch('file')
   const attachedFileName = attachedFile?.[0]?.name
 
   const onSubmit = async data => {
     const formData = new FormData()
-
     formData.append('student_id', user.id)
     formData.append('title', data.title)
     formData.append('type', data.type)
@@ -37,13 +55,30 @@ const NewRequest = () => {
     }
 
     try {
-      await axios.post('http://localhost:5000/api/requests', formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-          Authorization: `Bearer ${token}`
-        }
-      })
-      alert('Requisição enviada com sucesso!')
+      if (requestData?.id) {
+        // Atualiza requisição existente
+        await axios.put(
+          `http://localhost:5000/api/requests/${requestData.id}`,
+          formData,
+          {
+            headers: {
+              'Content-Type': 'multipart/form-data',
+              Authorization: `Bearer ${token}`
+            }
+          }
+        )
+        alert('Requisição atualizada com sucesso!')
+      } else {
+        // Cria nova requisição
+        await axios.post('http://localhost:5000/api/requests', formData, {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+            Authorization: `Bearer ${token}`
+          }
+        })
+        alert('Requisição enviada com sucesso!')
+      }
+      navigate(-1) // Volta para a tela anterior
     } catch (error) {
       console.error('Erro ao enviar requisição:', error)
       alert(
@@ -62,10 +97,10 @@ const NewRequest = () => {
           <div className='p-8 sm:p-12'>
             <div className='mb-6'>
               <h1 className='text-3xl font-bold text-gray-900'>
-                Nova Requisição
+                {requestData ? 'Editar Requisição' : 'Nova Requisição'}
               </h1>
               <p className='mt-2 text-gray-600'>
-                Preencha os dados para que possamos resolver seu problema.
+                Preencha os dados para {requestData ? 'editar sua requisição.' : 'que possamos resolver seu problema.'}
               </p>
             </div>
 
@@ -187,7 +222,9 @@ const NewRequest = () => {
                   disabled={isSubmitting}
                   className='w-full flex justify-center py-3 px-4 border border-transparent rounded-lg shadow-sm text-base font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:bg-gray-400 disabled:cursor-not-allowed'
                 >
-                  {isSubmitting ? 'Enviando...' : 'Enviar Requisição'}
+                  {isSubmitting
+                    ? (requestData ? 'Salvando...' : 'Enviando...')
+                    : (requestData ? 'Salvar Alterações' : 'Enviar Requisição')}
                 </button>
               </div>
             </form>
