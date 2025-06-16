@@ -5,7 +5,18 @@ const getAllRequests = async (req, res) => {
 
   try {
     const pool = await poolPromise
-    let query = ''
+    let query = `
+      SELECT 
+        r.id, 
+        r.type AS tipo, 
+        FORMAT(r.created_at, 'yyyy-MM-dd') AS data,
+        r.status,
+        ISNULL(u.name, 'Não definido') AS responsavel,
+        r.file_path
+      FROM requests r
+      LEFT JOIN users u ON r.approved_by = u.id
+    `
+
     const request = pool.request()
 
     if (role === 'admin') {
@@ -45,6 +56,7 @@ const getAllRequests = async (req, res) => {
   }
 }
 
+
 const createRequest = async (req, res) => {
   const { student_id, type, title, urgency, reason } = req.body
   const file_path = req.file ? req.file.path : null
@@ -75,4 +87,27 @@ const createRequest = async (req, res) => {
 module.exports = {
   getAllRequests,
   createRequest
+}
+
+const deleteRequest = async (req, res) => {
+  const requestId = req.params.id
+
+  try {
+    const pool = await poolPromise
+    await pool
+      .request()
+      .input('id', sql.Int, requestId)
+      .query('DELETE FROM requests WHERE id = @id')
+
+    res.status(200).json({ message: 'Requisição excluída com sucesso!' })
+  } catch (err) {
+    console.error('Erro ao excluir requisição:', err)
+    res.status(500).json({ error: 'Erro ao excluir a requisição' })
+  }
+}
+
+module.exports = {
+  getAllRequests,
+  createRequest,
+  deleteRequest
 }

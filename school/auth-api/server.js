@@ -9,7 +9,6 @@ const app = express()
 
 app.use(cors({ origin: process.env.FRONTEND_URL }))
 app.use(express.json())
-
 app.use((req, res, next) => {
   console.log(`${req.method} ${req.url}`)
   next()
@@ -20,7 +19,9 @@ app.use('/api/requests', requestRoutes)
 app.use('/api/users', userRoutes)
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')))
 
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')))
+
 const PORT = process.env.PORT || 5000
 app.listen(PORT, () => {
-  console.log(`🚀 Servidor rodando na porta ${PORT}`)
+  console.log(` Servidor rodando na porta ${PORT}`)
 })
