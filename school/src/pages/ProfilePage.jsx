@@ -10,9 +10,11 @@ const ProfilePage = () => {
   const [confirmPassword, setConfirmPassword] = useState('')
   const fileInputRef = useRef(null)
 
-  const API_URL = 'http://localhost:5000'
+  const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000'
 
-  if (!user) return <p>Carregando perfil...</p>
+  if (!user) {
+    return <p>Carregando perfil...</p>
+  }
 
   const handleImageChange = e => {
     const file = e.target.files[0]
@@ -53,17 +55,18 @@ const ProfilePage = () => {
     }
   }
 
-  const getAvatarSrc = () => {
+  const getAvatarSrc = avatarPath => {
     if (imagePreview) {
       return imagePreview
     }
-    if (user && user.avatarUrl) {
-      return `${API_URL}${user.avatarUrl}`
+    if (!avatarPath) {
+      return 'https://placehold.co/150x150/E2E8F0/4A5568?text=Sem+Foto'
     }
-    return `https://ui-avatars.com/api/?name=${user.name.replace(
-      ' ',
-      '+'
-    )}&background=random`
+    if (avatarPath.startsWith('http')) {
+      return avatarPath
+    }
+    const correctedPath = avatarPath.replace(/\\/g, '/')
+    return `${API_URL}/${correctedPath}`
   }
 
   const inputClassName =
@@ -76,7 +79,7 @@ const ProfilePage = () => {
         <form onSubmit={handleSubmit}>
           <div className='flex items-center mb-4'>
             <img
-              src={getAvatarSrc()}
+              src={getAvatarSrc(user.avatarUrl)}
               alt='Avatar'
               className='w-20 h-20 rounded-full object-cover mr-4'
             />
@@ -104,9 +107,9 @@ const ProfilePage = () => {
             </label>
             <input
               type='text'
-              value={user.name}
+              value={user.name || ''}
               disabled
-              className='block w-full bg-gray-200 rounded-lg border border-gray-300 focus:border-gray-500 focus:ring-gray-500 sm:text-sm text-base py-2 px-3 focus:outline-none cursor-not-allowed'
+              className='block w-full bg-gray-200 rounded-lg border border-gray-300 sm:text-sm text-base py-2 px-3 cursor-not-allowed'
             />
           </div>
           <div className='mb-4'>
@@ -115,9 +118,9 @@ const ProfilePage = () => {
             </label>
             <input
               type='email'
-              value={user.email}
+              value={user.email || ''}
               disabled
-              className='block w-full bg-gray-200 rounded-lg border border-gray-300 focus:border-gray-500 focus:ring-gray-500 sm:text-sm text-base py-2 px-3 focus:outline-none cursor-not-allowed'
+              className='block w-full bg-gray-200 rounded-lg border border-gray-300 sm:text-sm text-base py-2 px-3 cursor-not-allowed'
             />
           </div>
           <div className='border-t border-gray-200 my-4'></div>

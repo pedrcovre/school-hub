@@ -1,4 +1,3 @@
-
 const { poolPromise, sql } = require('../db')
 const bcrypt = require('bcryptjs')
 
@@ -13,7 +12,7 @@ const updateUserProfile = async (req, res) => {
     const userResult = await pool
       .request()
       .input('userId', sql.Int, userId)
-      .query('SELECT * FROM users WHERE id = @userId')
+      .query('SELECT * FROM Users WHERE Id = @userId')
 
     if (userResult.recordset.length === 0) {
       return res.status(404).json({ message: 'Usuário não encontrado.' })
@@ -28,13 +27,11 @@ const updateUserProfile = async (req, res) => {
         currentPassword,
         user.Password
       )
-
       if (!isPasswordCorrect) {
         return res
           .status(401)
           .json({ message: 'A senha atual está incorreta.' })
       }
-
       const hashedNewPassword = await bcrypt.hash(newPassword, 10)
       updates.push('Password = @newPassword')
       request.input('newPassword', sql.NVarChar, hashedNewPassword)
@@ -52,26 +49,26 @@ const updateUserProfile = async (req, res) => {
         .json({ message: 'Nenhum dado para atualizar foi fornecido.' })
     }
 
-    const updateQuery = `UPDATE users SET ${updates.join(
+    const updateQuery = `UPDATE Users SET ${updates.join(
       ', '
-    )} WHERE id = @userId; SELECT * FROM users WHERE id = @userId;`
+    )} WHERE Id = @userId; SELECT * FROM Users WHERE Id = @userId;`
 
     request.input('userId', sql.Int, userId)
 
     const updatedUserResult = await request.query(updateQuery)
-    const updatedUser = updatedUserResult.recordset[0]
+    const updatedUser = updatedUserResult.recordset[0] 
 
     const userForFrontend = {
-      id: updatedUser.id,
-      name: updatedUser.name,
-      email: updatedUser.email,
-      role: updatedUser.role,
-      avatarUrl: updatedUser.avatar_path
+      id: updatedUser.Id,
+      name: updatedUser.Name,
+      email: updatedUser.Email,
+      role: updatedUser.Role,
+      avatarUrl: updatedUser.avatar_path 
     }
 
     res.status(200).json({
       message: 'Perfil atualizado com sucesso!',
-      user: userForFrontend
+      user: userForFrontend 
     })
   } catch (error) {
     console.error('Erro detalhado ao atualizar perfil:', error)

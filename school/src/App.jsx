@@ -1,8 +1,7 @@
-// src/App.jsx
-
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
 import { AuthProvider, useAuth } from './contexts/AuthContext'
 import { SearchProvider } from './contexts/SearchContext'
+
 import {
   Register,
   Login,
@@ -11,8 +10,9 @@ import {
   Layout,
   ProtectedRoute,
   NewRequest,
-  ChangePassword,
-  ProfilePage
+  ProfilePage,
+  ForgotPassword,
+  ResetPassword
 } from './components'
 
 const AppRoutes = () => {
@@ -25,9 +25,14 @@ const AppRoutes = () => {
         path='/register'
         element={user ? <Navigate to='/' /> : <Register />}
       />
+
       <Route
-        path='/change-password'
-        element={user ? <Navigate to='/' /> : <ChangePassword />}
+        path='/forgot-password'
+        element={user ? <Navigate to='/' /> : <ForgotPassword />}
+      />
+      <Route
+        path='/reset-password/:token'
+        element={user ? <Navigate to='/' /> : <ResetPassword />}
       />
 
       <Route
@@ -41,7 +46,6 @@ const AppRoutes = () => {
         <Route index element={<Request />} />
         <Route path='resource' element={<Resource />} />
         <Route path='newrequest' element={<NewRequest />} />
-
         <Route path='profile' element={<ProfilePage />} />
       </Route>
 
