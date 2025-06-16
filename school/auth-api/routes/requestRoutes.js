@@ -16,7 +16,6 @@ router.post(
   requestController.createRequest
 )
 
-// NOVA ROTA DELETE
 router.delete('/:id', authMiddleware, requestController.deleteRequest)
 
 module.exports = router

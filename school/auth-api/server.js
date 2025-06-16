@@ -18,9 +18,6 @@ app.use('/api/auth', authRoutes)
 app.use('/api/requests', requestRoutes)
 app.use('/api/users', userRoutes)
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')))
-
-app.use('/uploads', express.static(path.join(__dirname, 'uploads')))
-
 const PORT = process.env.PORT || 5000
 app.listen(PORT, () => {
   console.log(` Servidor rodando na porta ${PORT}`)
