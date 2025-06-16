@@ -9,6 +9,8 @@ import ChangePassword from "../pages/ChangePassword";
 import Layout from "./Layout";
 import ProtectedRoute from "./ProtectedRoute";
 import ProfilePage from "../pages/ProfilePage";
+import ForgotPassword from "../pages/ForgotPassword";
+import ResetPassword from "../pages/ResetPassword";
 
 export {
     Navbar,
@@ -21,5 +23,7 @@ export {
     ChangePassword,
     Layout,
     ProtectedRoute,
-    ProfilePage
+    ProfilePage,
+    ForgotPassword,
+    ResetPassword
 }

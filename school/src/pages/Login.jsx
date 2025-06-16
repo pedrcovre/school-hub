@@ -1,3 +1,5 @@
+// src/components/Login.jsx
+
 import { useForm } from 'react-hook-form'
 import { useState } from 'react'
 import { useNavigate, Link } from 'react-router-dom'
@@ -11,7 +13,6 @@ const Login = () => {
     handleSubmit,
     formState: { errors }
   } = useForm()
-
   const navigate = useNavigate()
   const { login } = useAuth()
   const [isLoading, setIsLoading] = useState(false)
@@ -53,8 +54,10 @@ const Login = () => {
           <div className='w-full max-w-[450px]'>
             <PasswordInput register={register} errors={errors} />
 
+            {/* --- MUDANÇA AQUI --- */}
+            {/* O link agora aponta para a nova rota '/forgot-password' */}
             <Link
-              to='/change-password'
+              to='/forgot-password'
               className='text-sm text-black/60 underline cursor-pointer inline-block hover:text-blue-600'
             >
               Esqueceu sua senha?

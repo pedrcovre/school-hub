@@ -1,11 +1,6 @@
 import { createContext, useState, useContext, useEffect } from 'react'
 import axios from 'axios'
 
-// --- MUDANÇA 1: Definir a URL da API dinamicamente ---
-// Aqui criamos uma variável que vai guardar a URL base da sua API.
-// process.env.REACT_APP_API_URL é a variável de ambiente que vamos configurar no Render.
-// Se ela não existir (quando você estiver rodando o projeto localmente),
-// ele usará 'http://localhost:5000' como padrão.
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000'
 
 const AuthContext = createContext()
@@ -25,15 +20,10 @@ export const AuthProvider = ({ children }) => {
 
   const login = async (email, password) => {
     try {
-      // --- MUDANÇA 2: Usar a variável API_URL ---
-      // Trocamos a URL fixa pela nossa nova variável.
-      const response = await axios.post(
-        `${API_URL}/api/auth/login`, // Note o uso de `${API_URL}`
-        {
-          email,
-          password
-        }
-      )
+      const response = await axios.post(`${API_URL}/api/auth/login`, {
+        email,
+        password
+      })
       const { token, user: userData } = response.data
       localStorage.setItem('token', token)
       localStorage.setItem('user', JSON.stringify(userData))
@@ -46,15 +36,11 @@ export const AuthProvider = ({ children }) => {
 
   const registerUser = async (name, email, password) => {
     try {
-      // --- MUDANÇA 3: Usar a variável API_URL ---
-      const response = await axios.post(
-        `${API_URL}/api/auth/register`, // Usando a variável aqui também
-        {
-          name,
-          email,
-          password
-        }
-      )
+      const response = await axios.post(`${API_URL}/api/auth/register`, {
+        name,
+        email,
+        password
+      })
       return response.data
     } catch (error) {
       throw new Error(
@@ -76,15 +62,16 @@ export const AuthProvider = ({ children }) => {
     if (updates.profileImage) {
       formData.append('profileImage', updates.profileImage)
     }
-    if (updates.newPassword) {
+    if (updates.currentPassword) {
       formData.append('currentPassword', updates.currentPassword)
+    }
+    if (updates.newPassword) {
       formData.append('newPassword', updates.newPassword)
     }
 
     try {
-      // --- MUDANÇA 4: Usar a variável API_URL ---
       const response = await axios.patch(
-        `${API_URL}/api/users/profile`, // E aqui também
+        `${API_URL}/api/users/profile`,
         formData,
         {
           headers: {
@@ -94,14 +81,38 @@ export const AuthProvider = ({ children }) => {
         }
       )
 
-      const updatedUserData = response.data.user
-      localStorage.setItem('user', JSON.stringify(updatedUserData))
-      setUser(updatedUserData)
+      const updatedUser = response.data.user
 
-      return updatedUserData
+      setUser(updatedUser)
+      localStorage.setItem('user', JSON.stringify(updatedUser))
+
+      return updatedUser
     } catch (error) {
       throw new Error(
-        error.response?.data?.message || 'Erro ao atualizar o perfil'
+        error.response?.data?.message ||
+          'Erro no servidor ao atualizar o perfil'
+      )
+    }
+  }
+
+  const sendPasswordResetEmail = async email => {
+    try {
+      await axios.post(`${API_URL}/api/auth/forgot-password`, { email })
+    } catch (error) {
+      throw new Error(
+        error.response?.data?.message || 'Erro ao enviar e-mail de redefinição'
+      )
+    }
+  }
+
+  const resetPassword = async (token, password) => {
+    try {
+      await axios.post(`${API_URL}/api/auth/reset-password/${token}`, {
+        password: password
+      })
+    } catch (error) {
+      throw new Error(
+        error.response?.data?.message || 'Erro ao redefinir a senha'
       )
     }
   }
@@ -113,6 +124,8 @@ export const AuthProvider = ({ children }) => {
     logout,
     registerUser,
     updateUserProfile,
+    sendPasswordResetEmail,
+    resetPassword,
     isAuthenticated: !!token,
     role: user?.role || null
   }
