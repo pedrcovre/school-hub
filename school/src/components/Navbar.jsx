@@ -19,28 +19,53 @@ const Navbar = () => {
   const { searchTerm, setSearchTerm } = useSearch()
   const location = useLocation()
   const [isDropdownOpen, setIsDropdownOpen] = useState(false)
-
+  const [isNotifOpen, setIsNotifOpen] = useState(false)
+  const [notifications, setNotifications] = useState([])
+  const notifRef = useRef(null)
+  const dropdownRef = useRef(null)
 
   const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000'
 
   const showSearchBar =
     location.pathname === '/' || location.pathname.includes('/resource')
 
-  const dropdownRef = useRef(null)
-
   useEffect(() => {
     const handleClickOutside = event => {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
         setIsDropdownOpen(false)
       }
+      if (notifRef.current && !notifRef.current.contains(event.target)) {
+        setIsNotifOpen(false)
+      }
     }
-    if (isDropdownOpen) {
+    if (isDropdownOpen || isNotifOpen) {
       document.addEventListener('mousedown', handleClickOutside)
     }
     return () => {
       document.removeEventListener('mousedown', handleClickOutside)
     }
-  }, [isDropdownOpen])
+  }, [isDropdownOpen, isNotifOpen])
+
+  useEffect(() => {
+    // Simulação de busca de notificações
+    const fetchNotifications = async () => {
+      try {
+        // Exemplo: ajuste para buscar do backend real
+        let url = ''
+        if (user.role === 'admin') {
+          url = `${API_URL}/api/requests?new=true`
+        } else {
+          url = `${API_URL}/api/requests?user=${user.id}`
+        }
+        const res = await fetch(url, { credentials: 'include' })
+        const data = await res.json()
+        setNotifications(data.requests || [])
+      } catch {
+        setNotifications([])
+      }
+    }
+    if (isNotifOpen) fetchNotifications()
+  }, [isNotifOpen, user, API_URL])
 
   if (!user) return null
 
@@ -52,9 +77,7 @@ const Navbar = () => {
 
   const finalAvatarSrc = user.avatarUrl
     ? `${API_URL}${user.avatarUrl}`
-    : user.role === 'admin'
-    ? '/src/assets/icon-avatar-aluno.png'
-    : '/src/assets/icon-avatar-aluno.png'
+    : '/icon-avatar-aluno.png'
 
   const icon =
     user.role === 'admin' ? '/src/assets/logo-admin.png' : '/logo.svg'
@@ -94,14 +117,39 @@ const Navbar = () => {
               />
             </div>
           )}
-          <button
-            type='button'
-            className='flex items-center justify-center bg-[#395F8B1A] rounded-lg px-3 w-[50px] h-[50px]'
-          >
-            <span className='material-symbols-rounded text-zinc-700'>
-              notifications
-            </span>
-          </button>
+          <div className='relative' ref={notifRef}>
+            <button
+              type='button'
+              className='flex items-center justify-center bg-[#395F8B1A] rounded-lg px-3 w-[50px] h-[50px]'
+              onClick={() => setIsNotifOpen(!isNotifOpen)}
+            >
+              <span className='cursor-pointer material-symbols-rounded text-zinc-700'>
+                notifications
+              </span>
+            </button>
+            {isNotifOpen && (
+              <div className='absolute right-0 mt-2 w-64 bg-white rounded-md shadow-lg py-1 z-50'>
+                <div className='px-4 py-2 text-sm text-gray-700'>
+                  <p className='font-semibold'>Notificações</p>
+                </div>
+                <div className='border-t border-gray-100'></div>
+                {notifications.length > 0 ? (
+                  notifications.map((notif, index) => (
+                    <Link
+                      to={`/request/${notif.id}`}
+                      key={index}
+                      className='block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 cursor-pointer'
+                      onClick={() => setIsNotifOpen(false)}
+                    >
+                      {notif.message}
+                    </Link>
+                  ))
+                ) : (
+                  <p className='px-4 py-2 text-sm text-gray-500'>Nenhuma notificação</p>
+                )}
+              </div>
+            )}
+          </div>
           <div className='relative' ref={dropdownRef}>
             <button
               type='button'
