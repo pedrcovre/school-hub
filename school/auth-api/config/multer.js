@@ -1,15 +1,15 @@
-// auth-api/config/multer.js
+
 
 const multer = require('multer')
 const path = require('path')
 const fs = require('fs')
 
-// Define o local de armazenamento dos arquivos
+
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
     const uploadPath = path.join(__dirname, '..', 'uploads')
 
-    // Cria a pasta 'uploads' se ela não existir
+
     if (!fs.existsSync(uploadPath)) {
       fs.mkdirSync(uploadPath, { recursive: true })
     }
@@ -17,8 +17,8 @@ const storage = multer.diskStorage({
     cb(null, uploadPath)
   },
   filename: (req, file, cb) => {
-    // Garante um nome de arquivo único para evitar sobreposição
-    // Ex: resourceFile-1718515570189.pdf
+
+
     const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1e9)
     cb(
       null,
@@ -27,12 +27,12 @@ const storage = multer.diskStorage({
   }
 })
 
-// Limitar o tamanho do arquivo (exemplo: 10MB)
+
 const limits = {
   fileSize: 10 * 1024 * 1024 // 10 MB
 }
 
-// Filtro para aceitar só certos tipos (exemplo: pdf, docx, imagens)
+
 const fileFilter = (req, file, cb) => {
   const allowedTypes = [
     'application/pdf',
@@ -48,8 +48,7 @@ const fileFilter = (req, file, cb) => {
   }
 }
 
-// Cria a instância do multer com a configuração de armazenamento, filtro e limite
+
 const upload = multer({ storage, limits, fileFilter })
 
-// Exporta a instância para que possa ser usada nas rotas
 module.exports = upload
