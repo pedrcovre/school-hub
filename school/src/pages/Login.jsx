@@ -1,4 +1,4 @@
-// src/components/Login.jsx
+
 
 import { useForm } from 'react-hook-form'
 import { useState } from 'react'
@@ -54,8 +54,6 @@ const Login = () => {
           <div className='w-full max-w-[450px]'>
             <PasswordInput register={register} errors={errors} />
 
-            {/* --- MUDANÇA AQUI --- */}
-            {/* O link agora aponta para a nova rota '/forgot-password' */}
             <Link
               to='/forgot-password'
               className='text-sm text-black/60 underline cursor-pointer inline-block hover:text-blue-600'
