@@ -26,7 +26,6 @@ const NewRequest = () => {
     }
   })
 
-  // Preenche o formulário se estiver editando
   useEffect(() => {
     if (requestData) {
       reset({
@@ -56,7 +55,7 @@ const NewRequest = () => {
 
     try {
       if (requestData?.id) {
-        // Atualiza requisição existente
+
         await axios.put(
           `http://localhost:5000/api/requests/${requestData.id}`,
           formData,
@@ -69,7 +68,7 @@ const NewRequest = () => {
         )
         alert('Requisição atualizada com sucesso!')
       } else {
-        // Cria nova requisição
+
         await axios.post('http://localhost:5000/api/requests', formData, {
           headers: {
             'Content-Type': 'multipart/form-data',
@@ -78,7 +77,7 @@ const NewRequest = () => {
         })
         alert('Requisição enviada com sucesso!')
       }
-      navigate(-1) // Volta para a tela anterior
+      navigate(-1)
     } catch (error) {
       console.error('Erro ao enviar requisição:', error)
       alert(
