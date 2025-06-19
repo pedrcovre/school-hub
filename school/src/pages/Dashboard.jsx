@@ -1,9 +1,8 @@
-// src/pages/Dashboard.jsx
+
 import React, { useEffect, useState, useMemo } from 'react'
 import axios from 'axios'
 import { useAuth } from '../contexts/AuthContext'
-// Importar bibliotecas para gráficos (ex: Recharts, Chart.js, ou simples contadores)
-// Para começar, usaremos apenas contadores e texto.
+
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000'
 
@@ -37,7 +36,7 @@ const Dashboard = () => {
     fetchRequestsForDashboard()
   }, [token])
 
-  // Processamento dos dados para o dashboard
+
   const dashboardData = useMemo(() => {
     const totalRequests = requests.length
     const statusCounts = requests.reduce(
@@ -49,14 +48,14 @@ const Dashboard = () => {
       { pending: 0, approved: 0, rejected: 0 }
     )
 
-    // Contagem por tipo de requisição (se 'tipo' for um campo consistente)
+
     const typeCounts = requests.reduce((acc, req) => {
-      const type = req.tipo || 'Outro' // Assumindo que 'tipo' existe
+      const type = req.tipo || 'Outro' 
       acc[type] = (acc[type] || 0) + 1
       return acc
     }, {})
 
-    // Contagem por urgência (se 'urgency' for um campo consistente)
+
     const urgencyCounts = requests.reduce((acc, req) => {
       const urgency = req.urgency?.toLowerCase() || 'não informada'
       acc[urgency] = (acc[urgency] || 0) + 1
@@ -84,7 +83,7 @@ const Dashboard = () => {
     )
   }
 
-  // Se o usuário não for admin, você pode redirecionar ou mostrar uma mensagem de acesso negado
+
   if (role !== 'admin') {
     return (
       <div className='min-h-screen flex items-center justify-center'>
@@ -102,7 +101,7 @@ const Dashboard = () => {
       </h1>
 
       <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6'>
-        {/* Card: Total de Requisições */}
+
         <div className='bg-white p-6 rounded-lg shadow-md border border-gray-200'>
           <h2 className='text-xl font-semibold text-gray-700 mb-4'>
             Total de Requisições
@@ -112,7 +111,7 @@ const Dashboard = () => {
           </p>
         </div>
 
-        {/* Card: Requisições por Status */}
+
         <div className='bg-white p-6 rounded-lg shadow-md border border-gray-200'>
           <h2 className='text-xl font-semibold text-gray-700 mb-4'>
             Requisições por Status
@@ -139,7 +138,7 @@ const Dashboard = () => {
           </div>
         </div>
 
-        {/* Card: Requisições por Tipo */}
+
         <div className='bg-white p-6 rounded-lg shadow-md border border-gray-200'>
           <h2 className='text-xl font-semibold text-gray-700 mb-4'>
             Requisições por Tipo
@@ -159,7 +158,7 @@ const Dashboard = () => {
           </div>
         </div>
 
-        {/* Card: Requisições por Urgência */}
+
         <div className='bg-white p-6 rounded-lg shadow-md border border-gray-200'>
           <h2 className='text-xl font-semibold text-gray-700 mb-4'>
             Requisições por Urgência
