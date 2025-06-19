@@ -1,4 +1,4 @@
-// src/pages/Request.jsx
+
 import { useEffect, useState, useMemo } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../contexts/AuthContext'
@@ -69,7 +69,7 @@ const Request = () => {
     fetchData()
   }, [token])
 
-  // Nova função para buscar os detalhes completos da requisição
+
   const handleRequestClick = async requestId => {
     if (!token) return
     setIsLoadingDetails(true)
@@ -79,13 +79,13 @@ const Request = () => {
           Authorization: `Bearer ${token}`
         }
       })
-      // Mapeia os dados do backend para os nomes esperados no frontend
+
       const data = {
         ...response.data,
-        descricao: response.data.reason, // Renomeia 'reason' para 'descricao'
+        descricao: response.data.reason,
         arquivo: response.data.arquivo
           ? `${API_URL}/${response.data.arquivo.replace(/\\/g, '/')}`
-          : null // Constrói a URL completa do arquivo
+          : null
       }
       setSelectedRequest(data)
     } catch (error) {
@@ -134,19 +134,19 @@ const Request = () => {
   }
 
   const handleUpdateRequest = updatedData => {
-    // Atualiza a lista principal para refletir a mudança imediatamente
+
     setRequests(prev =>
       prev.map(req =>
         req.id === updatedData.id ? { ...req, ...updatedData } : req
       )
     )
-    // Atualiza os dados no modal aberto
+
     setSelectedRequest(prev => ({ ...prev, ...updatedData }))
   }
 
   return (
     <div className='min-h-screen relative'>
-      {/* Tela de Loading */}
+
       {isLoadingDetails && (
         <div className='fixed inset-0 bg-white/10 flex items-center justify-center z-[100]'>
           <p className='text-black text-3xl font-semibold'>
@@ -178,7 +178,7 @@ const Request = () => {
           )}
         </div>
 
-        {/* Abas de Navegação */}
+
         <div className='border-b border-gray-200 mb-6'>
           <nav className='-mb-px flex space-x-6' aria-label='Tabs'>
             {TABS.map(tab => (
@@ -197,7 +197,7 @@ const Request = () => {
           </nav>
         </div>
 
-        {/* Tabela de Requisições */}
+
         <div className='bg-white border border-gray-200 rounded-xl overflow-hidden'>
           <div className='overflow-x-auto'>
             <table className='min-w-full divide-y divide-gray-200'>
@@ -255,7 +255,7 @@ const Request = () => {
           </div>
         </div>
 
-        {/* Paginação */}
+
         <div className='flex justify-center items-center mt-8 gap-4'>
           <button
             onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
@@ -281,7 +281,7 @@ const Request = () => {
         </div>
       </div>
 
-      {/* Modal/Card da Requisição Aberta */}
+
       {selectedRequest && (
         <Requestaberta
           data={selectedRequest}
